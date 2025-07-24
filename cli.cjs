@@ -127,9 +127,11 @@ program.command("update")
             console.log("Already up to date.");
             return;
         }
-        console.log("Updating...");
+        console.log("Cleaning workspace...");
+        await run(["git", "commit", "-m", `chore: update fs-context to ${latestPackage.version}`]);
+        console.log("Pulling latest framework...");
         await run(["git", "pull"]);
-        console.log("Installing...");
+        console.log("Installing dependencies...");
         await run(["yarn", "install"]);
         console.log("Done.");
     })
