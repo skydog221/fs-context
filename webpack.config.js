@@ -4,6 +4,7 @@ const Webpackbar = require("webpackbar");
 
 const tsconfigJson = require("./tsconfig.json");
 const packageJson = require("./package.json");
+const webpack = require("webpack");
 
 /**
  * @type {import('webpack').Configuration}
@@ -34,7 +35,8 @@ module.exports = {
         new Webpackbar({
             name: packageJson.name,
             color: "green"
-        })
+        }),
+        new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
     ],
     devServer: {
         port: 25565,

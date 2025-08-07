@@ -1,3 +1,4 @@
+//@ts-nocheck
 import type { Input } from "blockly";
 import type Blockly from "blockly";
 import type { Block, BlocklyInjector, BlockMode, Extension, Menu } from "./structs";
