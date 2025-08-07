@@ -11,15 +11,20 @@
         "checkJs": true,
         "isolatedModules": true,
         "types": [
-            "webpack",
-            "vue",
+            "webpack-env",
             "node"
         ],
-        "baseUrl": "."
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            "framework/*": [
+                "framework/*"
+            ]
+        }
     },
     "include": [
-        "./src/**/*.ts",
-        "./config/**/*.ts",
-        "./src/**/*.vue"
+        "src/**/*.ts"
     ]
 }

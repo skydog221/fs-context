@@ -1,21 +1,17 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
-import pluginVue from "eslint-plugin-vue";
+
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-    { files: ["**/*.{js,mjs,cjs,ts,vue}"] },
+    { files: ["**/*.{js,mjs,cjs,ts}"] },
     { languageOptions: { globals: globals.browser } },
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
-    ...pluginVue.configs["flat/essential"],
-    { files: ["**/*.vue"], languageOptions: { parserOptions: { parser: tseslint.parser } } },
     {
         rules: {
-            "@typescript-eslint/no-namespace": "off",
             "@typescript-eslint/no-explicit-any": "off",
             "indent": ["error", 4],
-            "semi": ["error", "always"],
             "quotes": ["error", "double"],
             "@typescript-eslint/no-unused-vars": [
                 "error",
@@ -27,7 +23,7 @@ export default [
         },
     },
     {
-        files: ["**/*.cjs"],
+        files: ["webpack.config.js"],
         languageOptions: { globals: globals.node },
         rules: {
             "@typescript-eslint/no-require-imports": "off"
@@ -36,8 +32,6 @@ export default [
     {
         ignores: [
             "**/dist/**",
-            "**/config/webpack/generated/**/",
-            "**/lib/**",
             "**/node_modules/**"
         ]
     }
