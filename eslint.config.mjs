@@ -33,7 +33,7 @@ export default [
         ignores: [
             "**/dist/**",
             "**/node_modules/**",
-            "**/internal.ts"
+            "**/v1.ts"
         ]
     }
 ];

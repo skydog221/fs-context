@@ -4,6 +4,10 @@
     "scripts": {
         "lint": "eslint ."
     },
+    "platform": [
+        "tw",
+        "gandi"
+    ],
     "author": "陨落基围虾 <3161880837@qq.com>",
     "license": "MIT",
     "devDependencies": {

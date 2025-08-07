@@ -3,12 +3,15 @@ import { ContextEnvironment, ExtensionData, ScratchRuntime } from "./stored";
 /**
  * @description 指的是“ScratchMod”的加载器，不是传统意义的“模组”
  */
-export interface ModLoader {
+export interface ModLoadable {
     id: string;
-    obtainRuntime(this: ModLoader, environment: ContextEnvironment): ScratchRuntime;
-    load(this: ModLoader, extension: ExtensionData, runtime: ScratchRuntime): void;
-    unload?(this: ModLoader, extension: ExtensionData, runtime: ScratchRuntime): void;
+
+    context?(this: ModLoadable, environment: ContextEnvironment, executor: (args: any[]) => void): void;
+    obtainRuntime(this: ModLoadable, environment: ContextEnvironment, ...contextData: any[]): ScratchRuntime;
+
+    load(this: ModLoadable, extension: ExtensionData, runtime: ScratchRuntime, ...contextData: any[]): void;
+    unload?(this: ModLoadable, extension: ExtensionData, runtime: ScratchRuntime, ...contextData: any[]): void;
 }
-export function defineModLoader(loader: ModLoader) {
+export function defineModLoader(loader: ModLoadable) {
     return loader;
 }

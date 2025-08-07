@@ -1,19 +1,20 @@
-import { ModLoader } from "fs-context";
+import { ModLoadable } from "fs-context";
 import { KeyOfButMatch } from "../structs/util";
 
-const registered: Record<string, ModLoader> = {};
-export function register(loader: ModLoader) {
+const registered: Record<string, ModLoadable> = {};
+export function register(loader: ModLoadable) {
     registered[loader.id] = loader;
 }
-export function unregister(loader: ModLoader) {
-    delete registered[loader.id];
+export function unregister(id: string) {
+    delete registered[id];
 }
-export function call<K extends KeyOfButMatch<ModLoader, (...args: any[]) => any>>(id: string, event: K, args: Parameters<ModLoader[K]>) {
+export function call<K extends KeyOfButMatch<ModLoadable, (...args: any[]) => any>>(id: string, event: K, args: Parameters<ModLoadable[K]>): ReturnType<ModLoadable[K]> | null {
     const loader = registered[id];
     if (loader) {
         const method: (...args: any[]) => any = loader[event];
         if (method) {
-            method.apply(loader, args);
+            return method.apply(loader, args);
         }
     }
+    return null;
 }

@@ -21,6 +21,9 @@
             ],
             "fs-context": [
                 "src/fs-context/index"
+            ],
+            "fs-context/*": [
+                "src/fs-context/*"
             ]
         }
     },
