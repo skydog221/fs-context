@@ -1,7 +1,0 @@
-# module stores
-node_modules
-
-# compiling results
-dist
-generated
-lib
