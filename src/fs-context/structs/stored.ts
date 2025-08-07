@@ -1,4 +1,5 @@
 import { BlockType } from "./classify";
+import { ExtensionMetadata } from "./metadata";
 
 export interface BlockStored {
     opcode: string;
@@ -23,4 +24,22 @@ export type ExtensionStored = {
     getInfo(): ExtensionInfoStored;
 } & Record<string, (args: any) => any>;
 export interface ScratchRuntime {
+    extensions: {
+        unsandboxed: boolean;
+        register(extension: ExtensionStored): void;
+    }
+}
+export interface ContextEnvironment {
+    window: Window;
+    construtWith: any[];
+    extension: ExtensionData;
+    extender: ExtenderData;
+}
+export interface ExtenderData {
+    stored: new () => ExtensionStored;
+    metadata: new () => ExtensionMetadata;
+}
+export interface ExtensionData {
+    stored: ExtensionStored;
+    metadata: ExtensionMetadata;
 }
