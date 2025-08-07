@@ -1,7 +1,27 @@
 {
     "name": "fs-context",
-    "version": "1.0.0",
-    "repository": "https://github.com/Rundll86/fs-context",
+    "version": "2.0.0",
+    "scripts": {},
     "author": "陨落基围虾 <3161880837@qq.com>",
-    "license": "MIT"
+    "license": "MIT",
+    "devDependencies": {
+        "@eslint/js": "^9.16.0",
+        "@types/node": "^22.10.7",
+        "blockly": "^11.2.0",
+        "css-loader": "^7.1.2",
+        "eslint": "^9.16.0",
+        "eslint-plugin-vue": "^9.32.0",
+        "html-webpack-plugin": "^5.6.3",
+        "raw-loader": "^4.0.2",
+        "style-loader": "^4.0.0",
+        "ts-loader": "^9.5.1",
+        "typescript": "^5.6.3",
+        "typescript-eslint": "^8.16.0",
+        "url-loader": "^4.1.1",
+        "webpack": "^5.96.1",
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^5.1.0",
+        "webpack-merge": "^6.0.1",
+        "webpackbar": "^7.0.0"
+    }
 }
