@@ -1,4 +1,4 @@
-import { HexColorString } from "./util";
+import { HexColorString } from "fs-context";
 
 export const blockTypes = ["command", "reporter", "boolean"] as const;
 export type BlockType = typeof blockTypes[number];

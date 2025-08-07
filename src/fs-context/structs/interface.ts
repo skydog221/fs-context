@@ -1,5 +1,4 @@
-import { BlockBuilder } from "./builder";
-import { BlockType } from "./classify";
+import { BlockBuilder, BlockType } from "fs-context";
 
 export interface Buildable<out T> {
     build(): T;

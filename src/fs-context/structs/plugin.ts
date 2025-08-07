@@ -1,4 +1,4 @@
-import { ContextEnvironment, ExtensionData, ScratchRuntime } from "./stored";
+import { ContextEnvironment, ExtensionData, ScratchRuntime } from "fs-context";
 
 /**
  * @description 指的是“ScratchMod”的加载器，不是传统意义的“模组”

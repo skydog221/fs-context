@@ -1,15 +1,15 @@
 const path = require("path");
+const webpack = require("webpack");
 
 const Webpackbar = require("webpackbar");
 
 const tsconfigJson = require("./tsconfig.json");
 const packageJson = require("./package.json");
-const webpack = require("webpack");
 
 /**
  * @type {import('webpack').Configuration}
  */
-module.exports = {
+module.exports = packageJson.platform.map(platform => ({
     entry: "@/extension.ts",
     resolve: {
         extensions: [".js", ".ts"],
@@ -20,7 +20,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, "dist"),
-        filename: `${packageJson.name}.js`
+        filename: `${packageJson.name}-${platform}.js`
     },
     module: {
         rules: [
@@ -36,7 +36,10 @@ module.exports = {
             name: packageJson.name,
             color: "green"
         }),
-        new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
+        new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
+        new webpack.DefinePlugin({
+            fsContext: JSON.stringify({ platform })
+        })
     ],
     devServer: {
         port: 25565,
@@ -49,4 +52,4 @@ module.exports = {
             "Access-Control-Allow-Origin": "*"
         }
     }
-};
+}));

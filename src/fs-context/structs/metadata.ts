@@ -1,4 +1,4 @@
-import { ArgumentMap } from "./parser/compiltime";
+import { ArgumentMap } from "fs-context";
 
 export interface ExtensionMetadata<Blocks extends BlockMetadata[] = [], Menus extends MenuMetadata[] = []> {
     id: string;

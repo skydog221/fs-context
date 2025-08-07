@@ -1,8 +1,4 @@
-import { BlockBuilder, ExtensionBuilder, MenuBuilder } from "./builder";
-import { blockTypes } from "./classify";
-import { BlockTypeSelector } from "./interface";
-import { BlockMetadata, MenuItem, MenuMetadata } from "./metadata";
-import { ArgumentMap } from "./parser/compiltime";
+import { ArgumentMap, BlockBuilder, BlockMetadata, blockTypes, BlockTypeSelector, ExtensionBuilder, MenuBuilder, MenuItem, MenuMetadata } from "fs-context";
 
 export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata[] = []>(id: string): ExtensionBuilder<B, M> {
     let name = "Example extension";

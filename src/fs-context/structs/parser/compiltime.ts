@@ -1,4 +1,4 @@
-import { InputType, InputTypeCast } from "../classify";
+import { InputType, InputTypeCast } from "fs-context";
 
 export type FullArg = `[${string}${`:${InputType}` | ""}${`=${string}` | ""}]`;
 export type FindName<A extends FullArg> = A extends `[${infer N}:${string}=${string}]`
