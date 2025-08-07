@@ -174,7 +174,7 @@ function initExpandableBlock(this: SourceBlockTypeButScratch, runtime: Scratch, 
         let i = 0;
         while (sum < num) {
             const inc = getParamsIncPerClick.call(this, i);
-            if (inc === 0) throw new Error(`Unreachable param num`);
+            if (inc === 0) throw new Error("Unreachable param num");
             sum += inc;
             i++;
         }
@@ -186,7 +186,7 @@ function initExpandableBlock(this: SourceBlockTypeButScratch, runtime: Scratch, 
         let inc = 0;
         while (sum < num) {
             inc = getParamsIncPerClick.call(this, i);
-            if (inc === 0) throw new Error(`Unreachable param num`);
+            if (inc === 0) throw new Error("Unreachable param num");
             sum += inc;
             i++;
         }

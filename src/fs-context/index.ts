@@ -60,7 +60,6 @@ export namespace Extensions {
                     filter: block.platform,
                     isEdgeActivated: block.edge
                 };
-                //@ts-ignore
                 if (block.type === "label") delete currentBlock.opcode;
                 if (block.overloads.length > 0) {
                     currentBlock.overloads = block.overloadedText;
@@ -70,7 +69,7 @@ export namespace Extensions {
                     const argIndexNumber = Number(argIndex);
                     const partIndexNumber = block.parts.findIndex(e => e === arg);
                     const lastArg = block.plainArguments[argIndexNumber - 1];
-                    const nextArg = block.plainArguments[argIndexNumber + 1];
+                    // const nextArg = block.plainArguments[argIndexNumber + 1];
                     const lastPart = block.parts[partIndexNumber - 1];
                     const nextPart = block.parts[partIndexNumber + 1];
                     const amIRest = !!arg.dyConfig;
@@ -164,7 +163,7 @@ export namespace Extensions {
                             try {
                                 return e.loader.load(arg[e.name]);
                             } catch (err) {
-                                console.error(`Error while loading ${e.isRest ? 'dynamic' : 'static'} arg: ${e}`);
+                                console.error(`Error while loading ${e.isRest ? "dynamic" : "static"} arg: ${e}`);
                                 console.error(err);
                                 return e.loader.defaultValue ?? null;
                             };
@@ -221,7 +220,7 @@ export namespace Extensions {
                         } else {
                             return typeof result === "string" ? result : JSON.stringify(result);
                         };
-                    } catch (err) {
+                    } catch {
                         console.warn(`Error while running block ${block.opcode} of extension ${ext.id}`);
                     }
                 };

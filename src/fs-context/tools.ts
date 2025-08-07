@@ -15,15 +15,15 @@ export namespace Random {
     export function float(min: number, max: number) {
         return Math.random() * (max - min) + min;
     }
-    export function string(length: number, chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') {
-        let result = '';
+    export function string(length: number, chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+        let result = "";
         for (let i = 0; i < length; i++) {
             result += chars.charAt(Math.floor(Math.random() * chars.length));
         }
         return result;
     }
     export function color(): HexColorString {
-        return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
+        return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`;
     }
     export function choose<T>(items: T[]): T {
         return items[integer(0, items.length - 1)];
@@ -108,7 +108,7 @@ export namespace LegacyParser {
     }
     export function splitTextPart(str: string, separators: string[]) {
         if (!separators.length) return [str];
-        const regex = new RegExp(separators.map(s => s.replaceAll("$", "\\$")).join('|'), 'g');
+        const regex = new RegExp(separators.map(s => s.replaceAll("$", "\\$")).join("|"), "g");
         const result = str.split(regex);
         return result;
     }
@@ -117,10 +117,10 @@ export namespace Color {
     export function hexToRgb(str: HexColorString): [number, number, number] {
         let hexs: any[] = [];
         const reg = /^#?[0-9A-Fa-f]{6}$/;
-        if (!reg.test(str)) throw new SyntaxError('Invalid hex color string');
-        str = str.replace('#', '') as HexColorString;
+        if (!reg.test(str)) throw new SyntaxError("Invalid hex color string");
+        str = str.replace("#", "") as HexColorString;
         hexs = str.match(/../g) || [];
-        if (hexs.length < 3) throw new SyntaxError('Invalid hex color string');
+        if (hexs.length < 3) throw new SyntaxError("Invalid hex color string");
         return [parseInt(hexs[0], 16), parseInt(hexs[1], 16), parseInt(hexs[2], 16)];
     }
     export function darken(color: HexColorString, level: number): HexColorString {
@@ -128,14 +128,14 @@ export namespace Color {
         for (let i = 0; i < 3; i++) {
             rgb[i] = Math.floor(rgb[i] - (rgb[i] * level));
         }
-        return `#${rgb.map((i) => i.toString(16).padStart(2, "0")).join('')}`;
+        return `#${rgb.map((i) => i.toString(16).padStart(2, "0")).join("")}`;
     }
     export function lighten(color: HexColorString, level: number): HexColorString {
         const rgb = hexToRgb(color);
         for (let i = 0; i < 3; i++) {
             rgb[i] = Math.floor(rgb[i] + (255 - rgb[i]) * level);
         }
-        return `#${rgb.map((i) => i.toString(16).padStart(2, "0")).join('')}`;
+        return `#${rgb.map((i) => i.toString(16).padStart(2, "0")).join("")}`;
     }
 }
 export namespace Cast {

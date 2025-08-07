@@ -15,7 +15,15 @@ export default [
             "@typescript-eslint/no-namespace": "off",
             "@typescript-eslint/no-explicit-any": "off",
             "indent": ["error", 4],
-            "semi": ["error", "always"]
+            "semi": ["error", "always"],
+            "quotes": ["error", "double"],
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    varsIgnorePattern: "^_",
+                    argsIgnorePattern: "^_",
+                },
+            ],
         },
     },
     {
@@ -26,6 +34,11 @@ export default [
         }
     },
     {
-        ignores: ["dist", "config/webpack/generated/**/*"]
+        ignores: [
+            "**/dist/**",
+            "**/config/webpack/generated/**/",
+            "**/lib/**",
+            "**/node_modules/**"
+        ]
     }
 ];

@@ -20,7 +20,6 @@ import type {
     BlockPlain,
     DynamicArgConfigDefine,
     MenuReactMethodName,
-    MenuPlain,
     MenuItemPlain,
     ReadbackFunction
 } from "./internal";
@@ -36,7 +35,7 @@ export class Extension {
     allowSandboxed: boolean = true;
     requires: Record<string, Version> = {};
     blocks: Block<any>[] = [];
-    menus: Menu[] = [];
+    menus: Menu<any>[] = [];
     description: string = "An example extension";
     collaborators: Collaborator[] = [];
     autoDeriveColors: boolean = true;
@@ -104,7 +103,7 @@ export class Extension {
         if (this.generated) {
             const block = this.generated.getInfo().blocks.filter(e => typeof e !== "string").find(i => i.opcode === opcode);
             if (block) {
-                this.generated[block.opcode].call(this, arg);
+                this.generated[block.opcode ?? ""].call(this, arg);
             } else {
                 throw new MissingError(`Block "${opcode}" is not found.`);
             };
@@ -253,8 +252,8 @@ export class Menu<O extends Extension = Extension> {
 }
 export class Translator<L extends LanguageSupported, D extends LanguageStored> {
     private stored: TranslatorStoredData = {};
-    language: LanguageSupported = (window.Scratch ?? window.ScratchWaterBoxed)?.translate.language || 'zh-cn';
-    defaultLanguage: L = 'zh-cn' as L;
+    language: LanguageSupported = (window.Scratch ?? window.ScratchWaterBoxed)?.translate.language || "zh-cn";
+    defaultLanguage: L = "zh-cn" as L;
     useLegacy: boolean = false;
     extension?: Extension;
     store<T extends LanguageSupported>(lang: T, data: D & LanguageStored) {
@@ -425,49 +424,49 @@ export abstract class BlocklyInjector {
     }
 }
 export namespace BlockMode {
-    function matchBlock(target: Extension, key: string, descriptor: PropertyDescriptor) {
+    function matchBlock(target: Extension, key: string) {
         const parent = OriginalState.getConstructor<typeof Extension>(target);
         const matches = parent.blockDecorated.filter(e => e.opcode === key);
         if (matches.length > 1) {
             throw new GeneratedFailed(`Cannot match ${key} in ${parent.onlyInstance.id}, repeated opcode.`);
         } else if (matches.length < 1) {
-            throw new GeneratedFailed(`Cannot match ${key} in ${parent.onlyInstance.id}, block instance not found.`)
+            throw new GeneratedFailed(`Cannot match ${key} in ${parent.onlyInstance.id}, block instance not found.`);
         } else {
             return matches[0];
         }
     }
     export type TargetType = "sprite" | "stage";
-    export function Hidden(target: Extension, propertyKey: string, descriptor: PropertyDescriptor) {
-        const myself = matchBlock(target, propertyKey, descriptor);
+    export function Hidden(target: Extension, propertyKey: string, _: PropertyDescriptor) {
+        const myself = matchBlock(target, propertyKey);
         myself.hidden = true;
     }
-    export function UseMonitor(target: Extension, propertyKey: string, descriptor: PropertyDescriptor) {
-        const myself = matchBlock(target, propertyKey, descriptor);
+    export function UseMonitor(target: Extension, propertyKey: string, _: PropertyDescriptor) {
+        const myself = matchBlock(target, propertyKey);
         if (!["reporter", "bool"].includes(myself.type))
-            throw new GeneratedFailed(`Monitor can only be used in reporter block.`);
+            throw new GeneratedFailed("Monitor can only be used in reporter block.");
         myself.monitor = true;
     }
     export function Filt(...platform: TargetType[]) {
-        return function (target: Extension, propertyKey: string, descriptor: PropertyDescriptor) {
-            const myself = matchBlock(target, propertyKey, descriptor);
+        return function (target: Extension, propertyKey: string, _: PropertyDescriptor) {
+            const myself = matchBlock(target, propertyKey);
             myself.platform = platform;
         };
     }
-    export function ThreadRestartable(target: Extension, propertyKey: string, descriptor: PropertyDescriptor) {
-        const myself = matchBlock(target, propertyKey, descriptor);
+    export function ThreadRestartable(target: Extension, propertyKey: string, _: PropertyDescriptor) {
+        const myself = matchBlock(target, propertyKey);
         if (!["hat", "event"].includes(myself.type))
-            throw new GeneratedFailed(`ThreadRestartable can only be used in hat or event block.`);
+            throw new GeneratedFailed("ThreadRestartable can only be used in hat or event block.");
         myself.restartable = true;
     }
-    export function ActiveEdge(target: Extension, propertyKey: string, descriptor: PropertyDescriptor) {
-        const myself = matchBlock(target, propertyKey, descriptor);
+    export function ActiveEdge(target: Extension, propertyKey: string, _: PropertyDescriptor) {
+        const myself = matchBlock(target, propertyKey);
         if (!["hat"].includes(myself.type))
-            throw new GeneratedFailed(`ActiveEdge can only be used in hat block.`);
+            throw new GeneratedFailed("ActiveEdge can only be used in hat block.");
         myself.edge = true;
     }
     export function ToDynamic(argName: string, config?: DynamicArgConfigDefine) {
-        return function (target: Extension, propertyKey: string, descriptor: PropertyDescriptor) {
-            const myself = matchBlock(target, propertyKey, descriptor);
+        return function (target: Extension, propertyKey: string, _: PropertyDescriptor) {
+            const myself = matchBlock(target, propertyKey);
             const arg = myself.plainArguments.find(i => i.content === argName);
             if (arg) {
                 arg.dyConfig = config ?? {};
@@ -477,23 +476,23 @@ export namespace BlockMode {
         };
     }
     export function LabelBefore(text: string) {
-        return function (target: Extension, propertyKey: string, descriptor: PropertyDescriptor) {
+        return function (target: Extension, propertyKey: string, _: PropertyDescriptor) {
             const parent = OriginalState.getConstructor<typeof Extension>(target);
-            const myselfIndex = parent.blockDecorated.indexOf(matchBlock(target, propertyKey, descriptor));
+            const myselfIndex = parent.blockDecorated.indexOf(matchBlock(target, propertyKey));
             parent.blockDecorated.splice(myselfIndex, 0, Block.create(text, { type: "label" }));
         };
     }
     export function LabelAfter(text: string) {
-        return function (target: Extension, propertyKey: string, descriptor: PropertyDescriptor) {
+        return function (target: Extension, propertyKey: string, _: PropertyDescriptor) {
             const parent = OriginalState.getConstructor<typeof Extension>(target);
-            const myselfIndex = parent.blockDecorated.indexOf(matchBlock(target, propertyKey, descriptor));
+            const myselfIndex = parent.blockDecorated.indexOf(matchBlock(target, propertyKey));
             parent.blockDecorated.splice(myselfIndex + 1, 0, Block.create(text, { type: "label" }));
         };
     }
     export function Separator(position: "before" | "after") {
-        return function (target: Extension, propertyKey: string, descriptor: PropertyDescriptor) {
+        return function (target: Extension, propertyKey: string, _: PropertyDescriptor) {
             const parent = OriginalState.getConstructor<typeof Extension>(target);
-            const myselfIndex = parent.blockDecorated.indexOf(matchBlock(target, propertyKey, descriptor));
+            const myselfIndex = parent.blockDecorated.indexOf(matchBlock(target, propertyKey));
             parent.blockDecorated.splice(myselfIndex + (position === "before" ? 0 : 1), 0, Block.create("", { type: "separator" }));
         };
     }
@@ -557,13 +556,13 @@ export namespace MenuMode {
             rawMenu.reactive = state;
             rawMenu.reactiveMethod = `${target.id}_${propertyKey}_${Random.integer(Number.MIN_VALUE, Number.MAX_VALUE)}`;
             parent.menuDecorated.push(rawMenu as unknown as Menu<Extension>);
-        }
+        };
     }
     export function Readback<T extends Extension>(executor: ReadbackFunction<T>) {
         return function <K extends keyof T>(target: T, propertyKey: K & string) {
             const rawMenu = matchMenu(target, propertyKey);
             rawMenu.name = propertyKey;
             rawMenu.readback = executor;
-        }
+        };
     }
 }

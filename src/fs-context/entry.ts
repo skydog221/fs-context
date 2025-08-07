@@ -11,8 +11,8 @@ try {
 declare let injectBlocks: (extension: ExtensionPlain) => void;
 const currentScratch = Extensions.getScratch() as ScratchWaterBoxed;
 if (currentScratch) {
-    let loaded = await loaderConfig.target;
-    let target = Object.hasOwn(loaded, "default") ? loaded.default : loaded;
+    const loaded = await loaderConfig.target;
+    const target = Object.hasOwn(loaded, "default") ? loaded.default : loaded;
     if (OriginalState.isConstructorExtends(target, Extension)) {
         const extensionLoaded = Extensions.load(target);
         if (loaderConfig.mode === "debug") {

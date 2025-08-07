@@ -1,6 +1,6 @@
 import { InputLoader } from "@framework/internal";
 import { BlockMode, BlockType, Extension, Menu, MenuMode } from "@framework/structs";
-import { DOM, Random } from "@framework/tools";
+import { Random } from "@framework/tools";
 export default class MyExtension extends Extension {
     id = "myextension";
     displayName = "My Extension";
@@ -11,16 +11,12 @@ export default class MyExtension extends Extension {
             },
         }
     };
-    @BlockType.Reporter("返回[sth:menu(a,b,c)=b]")
-    returnSth({ sth }: { sth: string }) {
-        return sth;
-    }
     @MenuMode.Readback((menu) => {
         return menu.generated.sort(() => Random.float(-1, 1));
     })
     @MenuMode.RefuseReporters
     @MenuMode.Reactive(true)
-    apple = new Menu("苹果,智慧果,超凡子,apple,林檎");
+        apple = new Menu("苹果,智慧果,超凡子,apple,林檎");
     @BlockType.Command("吃[apple:menu]")
     eatApple({ apple }: { apple: string }) {
         this.apple.items = this.apple.items.filter(item => item.value !== apple);

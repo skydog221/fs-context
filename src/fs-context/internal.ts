@@ -23,6 +23,71 @@ export interface ArgumentDefine<T extends ValidArgumentName = ValidArgumentName>
     inputType?: InputType;
     rest?: DynamicArgConfigDefine;
 }
+export type Remove<A extends any[], I extends any> =
+    A extends [infer F, ...infer R] ?
+    F extends I ?
+    [...R] :
+    [F, ...Remove<R, I>] :
+    [];
+export type MapToJson<A extends string[]> =
+    A extends [infer F extends string, ...infer R extends string[]] ? [ParseJson<F>, ...MapToJson<R>] : [];
+export type MapToKeyPair<A extends string[]> =
+    A["length"] extends 0 ? {} :
+    A extends [infer C extends KeyPairFormat, ...infer R extends string[]] ?
+    {
+        [K in C as K extends `"${infer N extends string}":${string}` ? N : never]: K extends `"${string}":${infer D}` ? ParseJson<D> : never
+    } & MapToKeyPair<R> :
+    {};
+export type KeyPairFormat = `"${string}":${string}`;
+export type ParseKeyPair<S extends string> = {
+    [K in S as K extends `"${infer N extends string}":${string}` ? N : never]: K extends `"${string}":${infer D}` ? ParseJson<D> : never;
+};
+export type ParseJson<S extends string> =
+    S extends `"${infer C}"` ? C :
+    S extends `${infer N extends number}` ? N :
+    S extends "true" ? true :
+    S extends "false" ? false :
+    S extends `[${infer C}]` ? C extends "" ? [] : MapToJson<SplitBy<C, ",">> :
+    S extends `{${infer C}}` ? C extends "" ? {} : MapToKeyPair<SplitBy<C, ",">> : never;
+export type SplitBy<F extends string, S extends string> =
+    F extends `${infer Prefix extends string}${S}${infer Suffix extends string}` ?
+    [Prefix, ...SplitBy<Suffix, S>] :
+    [F];
+export type BuildTuple<L extends number, T extends any[] = []> =
+    T["length"] extends L ? T : BuildTuple<L, [...T, any]>;
+export type Subtract<A extends number, B extends number> =
+    BuildTuple<A> extends [...infer U, ...BuildTuple<B>] ? U["length"] : never;
+export type RepeatOf<S extends string, N extends number> =
+    N extends 0 ? "" :
+    `${S}${RepeatOf<S, Subtract<N, 1>>}`;
+export type FullArg = `[${string}${`:${InputType}` | ""}${`=${string}` | ""}]`;
+export type FindName<A extends FullArg> = A extends `[${infer N}:${string}=${string}]`
+    ? N
+    : A extends `[${infer N}:${string}]`
+    ? N
+    : A extends `[${infer N}=${string}]`
+    ? N
+    : A extends `[${infer N}]`
+    ? N
+    : never;
+export type FindType<A extends FullArg> = A extends `[${string}:${infer T extends InputType}=${string}]`
+    ? T
+    : A extends `[${string}:${infer T extends InputType}]`
+    ? T
+    : "string";
+export type FindValue<A extends FullArg> = A extends `[${string}:${string}=${infer V}]`
+    ? V
+    : A extends `[${string}=${infer V}]`
+    ? V
+    : "";
+export type FindArgumentText<T extends `${string}${FullArg}${string}`> = T extends `${string}[${infer A}]${string}` ? `[${A}]` : never;
+export type FindArgumentTexts<T extends string> = T extends `${string}[${infer A}]${string}`
+    ? [`[${A}]`, ...FindArgumentTexts<T extends `${string}[${string}]${string}[${infer B}]${string}` ? `[${B}]` : "">]
+    : [];
+export type ArgumentMap<T extends string> = {
+    [K in FindArgumentTexts<T>[number]as FindName<K>]: InputTypeCast[FindType<K>];
+};
+export type ToNumber<S extends `${number}`> = S extends `${infer N extends number}` ? N : never;
 export type ValidArgumentName = `${"$" | "_"}${string}`;
 export type MethodFunction<T> = (this: Extension, args: T) => any;
 export type Scratch = {
@@ -58,6 +123,7 @@ export interface BlockConfigB<T extends ArgumentDefine[]> {
 export interface BlockConfiger<T extends (string | ArgumentDefine)[], O extends Extension> {
     config: (arg: BlockConfigA<T>) => Block<O>;
 }
+export type HexDigit = Remove<SplitBy<"0123456789abcdefABCDEF", "">, "">[number];
 export type HexColorString = `#${string}`;
 export interface ColorDefine {
     block?: HexColorString;
@@ -179,7 +245,7 @@ export interface ArgumentPlain {
     menu?: string;
 }
 export interface BlockPlain {
-    opcode: string;
+    opcode?: string;
     arguments: Record<string, ArgumentPlain>;
     text: string;
     blockType: BlockTypePlain;

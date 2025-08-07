@@ -9,7 +9,7 @@ export default class ApplePie extends Extension {
     /* 每次回读时对菜单项进行随机排序 */
     @MenuMode.Readback((menu) => menu.generated.sort(() => Random.float(-1, 1)))
     @MenuMode.Reactive(true)
-    appleNames = new Menu("苹果,智慧果,超凡子,Apple,林檎");
+        appleNames = new Menu("苹果,智慧果,超凡子,Apple,林檎");
 
     @BlockType.Reporter("随机返回一种苹果")
     returnRandomApple() {
