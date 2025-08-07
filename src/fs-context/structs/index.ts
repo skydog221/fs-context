@@ -2,6 +2,7 @@ import { BlockBuilder, ExtensionBuilder, MenuBuilder } from "./builder";
 import { blockTypes } from "./classify";
 import { BlockTypeSelector } from "./interface";
 import { BlockMetadata, MenuItem, MenuMetadata } from "./metadata";
+import { ArgumentMap } from "./parser/compiltime";
 
 export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata[] = []>(id: string): ExtensionBuilder<B, M> {
     let name = "Example extension";
@@ -19,6 +20,14 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
         },
         description(v) {
             description = v;
+            return this;
+        },
+        blocks(v) {
+            blocks.push(...v);
+            return this;
+        },
+        menus(v) {
+            menus.push(...v);
             return this;
         },
         menu<N extends MenuMetadata>(md: N): ExtensionBuilder<B, [...M, N]> {
@@ -43,21 +52,23 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
 export const blockType = new Proxy({}, {
     get(_, prop) {
         if (prop in blockTypes) {
-            return <T extends string>(opcode: string): BlockBuilder<T> => {
-                let text = "";
-                let action = (_: any) => { };
+            return <T extends string, V>(opcode: string): BlockBuilder<T, V> => {
+                let text = "" as unknown as T;
+                let action = (_: any) => {
+                    return undefined as unknown as V;
+                };
                 return {
                     opcode(v) {
                         opcode = v;
                         return this;
                     },
-                    action(v) {
+                    action<NV>(v: ((args: ArgumentMap<T>) => V & NV)) {
                         action = v;
-                        return this;
+                        return this as unknown as BlockBuilder<T, NV>;
                     },
-                    text(t) {
+                    text<NT extends string>(t: NT & T) {
                         text = t;
-                        return this;
+                        return this as unknown as BlockBuilder<NT, V>;
                     },
                     build() {
                         return {
@@ -83,6 +94,18 @@ export function menu<N extends string, I extends MenuItem[]>(name: N): MenuBuild
         item<K extends string, V, NI extends MenuItem = MenuItem<K, V>>(key: K, value: V): MenuBuilder<N, [...I, NI]> {
             items.push({ key, value });
             return this as unknown as MenuBuilder<N, [...I, NI]>;
+        },
+        reportable(v) {
+            reportable = v;
+            return this;
+        },
+        readback(v) {
+            readback = v;
+            return this;
+        },
+        items(v) {
+            items.push(...v);
+            return this;
         },
         build() {
             return {

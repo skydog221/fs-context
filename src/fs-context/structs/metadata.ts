@@ -7,10 +7,10 @@ export interface ExtensionMetadata<Blocks extends BlockMetadata[] = [], Menus ex
     blocks: Blocks;
     menus: Menus;
 }
-export interface BlockMetadata<Text extends string = string> {
+export interface BlockMetadata<Text extends string = string, Value = any> {
     opcode: string;
     text: Text;
-    action: (args: ArgumentMap<Text>) => any;
+    action: (args: ArgumentMap<Text>) => Value;
 }
 export interface MenuItem<Key extends string = string, Value = any> {
     key: Key;
