@@ -1,1 +1,1 @@
-import { extension } from "./fs-context/structs";
+import { extension } from "./fs-context";

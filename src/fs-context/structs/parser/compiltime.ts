@@ -21,8 +21,9 @@ export type FindValue<A extends FullArg> = A extends `[${string}:${string}=${inf
     : A extends `[${string}=${infer V}]`
     ? V
     : "";
-export type FindArgumentTexts<T extends string> = T extends `${string}[${infer A}]${string}`
-    ? [`[${A}]`, ...FindArgumentTexts<T extends `${string}[${string}]${string}[${infer B}]${string}` ? `[${B}]` : "">]
+export type FindArgumentTexts<T extends string> =
+    T extends `${string}[${infer A}]${string}`
+    ? [`[${A}]`, ...FindArgumentTexts<T extends `${string}[${string}]${infer B}` ? B : "">]
     : [];
 export type ArgumentMap<T extends string> = {
     [K in FindArgumentTexts<T>[number]as FindName<K>]: InputTypeCast[FindType<K>];

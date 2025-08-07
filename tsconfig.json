@@ -19,8 +19,8 @@
             "@/*": [
                 "src/*"
             ],
-            "framework/*": [
-                "framework/*"
+            "fs-context": [
+                "src/fs-context/index"
             ]
         }
     },

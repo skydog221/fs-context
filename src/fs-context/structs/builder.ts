@@ -21,5 +21,5 @@ export interface MenuBuilder<
     Extension extends ExtensionMetadata = ExtensionMetadata
 > extends Builder<MenuMetadata<Name, Items>> {
     name<N extends string>(name: N): MenuBuilder<N, Items, Extension>;
-    item<N extends MenuItem>(item: N): MenuBuilder<Name, [...Items, N], Extension>;
+    item<K extends string, V, N extends MenuItem<K, V>>(key: K, value: V): MenuBuilder<Name, [...Items, N], Extension>;
 }

@@ -80,8 +80,8 @@ export function menu<N extends string, I extends MenuItem[]>(name: N): MenuBuild
             name = v as unknown as N;
             return this as unknown as MenuBuilder<NN, I>;
         },
-        item<NI extends MenuItem>(item: NI): MenuBuilder<N, [...I, NI]> {
-            items.push(item);
+        item<K extends string, V, NI extends MenuItem = MenuItem<K, V>>(key: K, value: V): MenuBuilder<N, [...I, NI]> {
+            items.push({ key, value });
             return this as unknown as MenuBuilder<N, [...I, NI]>;
         },
         build() {
