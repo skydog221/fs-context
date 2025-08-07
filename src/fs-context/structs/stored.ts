@@ -1,4 +1,4 @@
-import { BlockType, ExtensionMetadata } from "fs-context";
+import { BlockType, ExtensionBuilder, ExtensionMetadata } from "fs-context";
 
 export interface BlockStored {
     opcode: string;
@@ -17,7 +17,7 @@ export interface ExtensionInfoStored {
     id: string;
     name: string;
     blocks: BlockStored[];
-    menus: MenuStored[];
+    menus: Record<string, MenuStored>;
 }
 export type ExtensionStored = {
     getInfo(): ExtensionInfoStored;
@@ -30,13 +30,12 @@ export interface ScratchRuntime {
 }
 export interface ContextEnvironment {
     window: Window;
-    construtWith: any[];
     extension: ExtensionData;
     extender: ExtenderData;
 }
 export interface ExtenderData {
     stored: new () => ExtensionStored;
-    metadata: new () => ExtensionMetadata;
+    metadata: ExtensionBuilder;
 }
 export interface ExtensionData {
     stored: ExtensionStored;

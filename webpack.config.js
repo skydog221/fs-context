@@ -9,7 +9,7 @@ const packageJson = require("./package.json");
 /**
  * @type {import('webpack').Configuration}
  */
-module.exports = packageJson.platform.map(platform => ({
+module.exports = packageJson.extension.platform.map(platform => ({
     entry: "@/extension.ts",
     resolve: {
         extensions: [".js", ".ts"],
@@ -20,7 +20,7 @@ module.exports = packageJson.platform.map(platform => ({
     },
     output: {
         path: path.resolve(__dirname, "dist"),
-        filename: `${packageJson.name}-${platform}.js`
+        filename: `[${platform}] ${packageJson.extension.name}@${packageJson.extension.version}.js`
     },
     module: {
         rules: [
@@ -33,7 +33,7 @@ module.exports = packageJson.platform.map(platform => ({
     },
     plugins: [
         new Webpackbar({
-            name: packageJson.name,
+            name: packageJson.extension.name.toUpperCase(),
             color: "green"
         }),
         new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),

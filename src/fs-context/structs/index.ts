@@ -1,4 +1,4 @@
-import { ArgumentMap, BlockBuilder, BlockMetadata, blockTypes, BlockTypeSelector, ExtensionBuilder, MenuBuilder, MenuItem, MenuMetadata } from "fs-context";
+import { ArgumentMap, BlockBuilder, BlockMetadata, BlockType, blockTypes, BlockTypeSelector, ExtensionBuilder, MenuBuilder, MenuItem, MenuMetadata } from "fs-context";
 
 export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata[] = []>(id: string): ExtensionBuilder<B, M> {
     let name = "Example extension";
@@ -48,6 +48,7 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
 export const blockType = new Proxy({}, {
     get(_, prop) {
         if (prop in blockTypes) {
+            let blockType = prop as BlockType;
             return <T extends string, V>(opcode: string): BlockBuilder<T, V> => {
                 let text = "" as unknown as T;
                 let action = (_: any) => {
@@ -66,11 +67,16 @@ export const blockType = new Proxy({}, {
                         text = t;
                         return this as unknown as BlockBuilder<NT, V>;
                     },
+                    type(v) {
+                        blockType = v;
+                        return this;
+                    },
                     build() {
                         return {
                             opcode,
                             text,
-                            action
+                            action,
+                            type: blockType
                         }
                     },
                 };
