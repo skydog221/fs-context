@@ -42,6 +42,9 @@ module.exports = {
         client: {
             logging: "none"
         },
-        webSocketServer: false
+        webSocketServer: false,
+        headers: {
+            "Access-Control-Allow-Origin": "*"
+        }
     }
 };
