@@ -44,7 +44,7 @@ export function darken(hexColor: string, amount: number): HexColorString {
     return toHex({ r: darkenR, g: darkenG, b: darkenB });
 }
 export function toRgb(hexColor: string): ColorRGB {
-    let color = fix(hexColor);
+    const color = fix(hexColor);
     const hex = color.replace("#", "");
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
