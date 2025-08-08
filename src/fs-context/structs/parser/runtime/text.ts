@@ -10,8 +10,7 @@ export interface TextPart {
     defaultValue: string;
 }
 export function parseArg(inputStr: string): TextPart {
-    const regex = /^\[([^\]:=]+)(?::([^\]=]*))?(?:=([^\]]*))?\]$/;
-    const match = inputStr.match(regex);
+    const match = inputStr.match(regexMap.ARG_SLOT);
     if (!match) {
         return {
             type: "text",
@@ -20,9 +19,9 @@ export function parseArg(inputStr: string): TextPart {
             defaultValue: ""
         };
     }
-    const name = unquote(match[1]);
-    const type = match[2] !== undefined ? unquote(match[2]) : "string";
-    const value = match[3] !== undefined ? unquote(match[3]) : "";
+    const name = unquote(match[1]).trim();
+    const type = (match[2] !== undefined ? unquote(match[2]) : "string").trim();
+    const value = (match[3] !== undefined ? unquote(match[3]) : "").trim();
     return {
         type: "arg",
         content: name,
