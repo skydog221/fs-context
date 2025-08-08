@@ -3,7 +3,7 @@
     "version": "2.0.0",
     "scripts": {
         "lint": "eslint .",
-        "build": "cross-env NODE_ENV=production webpack --config-name",
+        "build": "cross-env NODE_ENV=production webpack",
         "dev": "cross-env NODE_ENV=development webpack serve --config-name",
         "check-type": "tsc --noEmit"
     },
@@ -12,9 +12,7 @@
         "version": "1.0.0",
         "platform": [
             "tw",
-            "gandi",
-            "clipcc",
-            "ccw"
+            "gandi"
         ],
         "author": "陨落基围虾"
     },

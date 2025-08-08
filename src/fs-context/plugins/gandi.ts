@@ -5,20 +5,19 @@ declare const window: Window & {
 };
 export default defineModLoader({
     id: "gandi",
-    context(_, executor) {
-        window.tempExt = {
-            extension: class {
-                constructor(...args: any[]) {
-                    executor(args);
-                }
-            }
-        }
+    obtainRuntime(_, ...args) {
+        return args[0];
     },
-    obtainRuntime(_, ...contextData) {
-        return contextData[0];
+    apply(env) {
+        window.tempExt = {
+            Extension: env.extender.stored,
+            info: {
+                extensionId: env.extension.metadata.id
+            }
+        };
     },
     load() { },
-    isSandboxed(_, runtime) {
-        return !runtime?.extensions.unsandboxed;
+    isSandboxed() {
+        return false;
     },
 });

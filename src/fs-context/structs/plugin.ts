@@ -6,8 +6,9 @@ import { ContextEnvironment, ScratchRuntime } from "fs-context/structs/stored";
 export interface ModLoadable {
     id: string;
 
+    apply?(this: ModLoadable, environment: ContextEnvironment): void;
+    initExtender?(this: ModLoadable, ...args: any[]): void;
     isSandboxed(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime): boolean;
-    context?(this: ModLoadable, environment: ContextEnvironment, executor: (args: any[]) => void): void;
     obtainRuntime(this: ModLoadable, environment: ContextEnvironment, ...contextData: any[]): ScratchRuntime;
     load(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, ...contextData: any[]): void;
     unload?(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, ...contextData: any[]): void;
