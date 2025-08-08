@@ -2,13 +2,13 @@ const path = require("path");
 const webpack = require("webpack");
 
 const Webpackbar = require("webpackbar");
-const CopyPlugin = require("copy-webpack-plugin");
 
 const tsconfigJson = require("./tsconfig.json");
 const packageJson = require("./package.json");
 
+console.log(process.env.NODE_ENV);
 module.exports = packageJson.extension.platform.map(platform => {
-    const filename = `[${platform}] ${packageJson.extension.name}@${packageJson.extension.version}.js`;
+    const filename = `[${platform}]${packageJson.extension.name}@${packageJson.extension.version}.js`;
     return {
         name: platform,
         entry: "fs-context/entry.ts",
@@ -39,7 +39,11 @@ module.exports = packageJson.extension.platform.map(platform => {
             }),
             new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
             new webpack.DefinePlugin({
-                fsContext: JSON.stringify({ platform })
+                fsContext: JSON.stringify({
+                    platform,
+                    developing: process.env.NODE_ENV === "development",
+                    extension: packageJson.extension
+                })
             })
         ],
         /**
@@ -59,6 +63,7 @@ module.exports = packageJson.extension.platform.map(platform => {
                 return mw;
             },
             allowedHosts: "all"
-        }
+        },
+        mode: process.env.NODE_ENV
     };
 });

@@ -1,3 +1,4 @@
+import { textParser } from "fs-context";
 import { ExtensionBuilder, BlockBuilder, MenuBuilder } from "./builder";
 import { blockTypes, BlockType } from "./classify";
 import { BlockTypeSelector } from "./interface";
@@ -51,7 +52,7 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
 };
 export const blockType = new Proxy({}, {
     get(_, prop) {
-        if (prop in blockTypes) {
+        if (blockTypes.includes(prop as BlockType)) {
             let blockType = prop as BlockType;
             return <T extends string, V>(opcode: string): BlockBuilder<T, V> => {
                 let text = "" as unknown as T;
@@ -80,9 +81,16 @@ export const blockType = new Proxy({}, {
                             opcode,
                             text,
                             action,
-                            type: blockType
+                            type: blockType,
+                            parts() {
+                                return textParser.toParts(text);
+                            }
                         }
                     },
+                    parts(v) {
+                        text = textParser.toMetadata(v()) as T;
+                        return this;
+                    }
                 };
             };
         }

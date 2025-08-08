@@ -1,4 +1,4 @@
-import { extension } from "fs-context/structs";
+import { extension } from "fs-context";
 import add from "./blocks/add";
 
 export default extension("fourcalc")

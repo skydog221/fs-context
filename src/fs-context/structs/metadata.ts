@@ -1,5 +1,6 @@
 import { BlockType } from "./classify";
 import { ArgumentMap } from "./parser/compiltime";
+import { TextPart } from "./parser/runtime/text";
 
 export interface ExtensionMetadata<Blocks extends BlockMetadata[] = BlockMetadata[], Menus extends MenuMetadata[] = MenuMetadata[]> {
     id: string;
@@ -9,6 +10,8 @@ export interface ExtensionMetadata<Blocks extends BlockMetadata[] = BlockMetadat
     menus: Menus;
 }
 export interface BlockMetadata<Text extends string = string, Value = any> {
+    parts(): TextPart[];
+
     opcode: string;
     text: Text;
     type: BlockType;

@@ -14,4 +14,3 @@ export interface ModLoadable {
 export function defineModLoader(loader: ModLoadable) {
     return loader;
 }
-console.log(exports);
