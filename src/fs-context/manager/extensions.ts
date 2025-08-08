@@ -59,7 +59,7 @@ export function load(environment: ContextEnvironment, platform: string) {
         const runtime = obtainRuntime(environment, platform, ...contextData);
         const isSandboxed = pluginManager.call(platform, "isSandboxed", [environment, runtime]).data;
         if (fsContext.developing) {
-            console.log(`Runtime(${isSandboxed ? "S" : "Uns"}andboxed) obtained:`, runtime);
+            console.log(`Runtime(${isSandboxed ? "s" : "uns"}andboxed) obtained:`, runtime);
         }
         if (!environment.extension.metadata.allowSandbox && isSandboxed) {
             throw new Error(`Extension "${environment.extension.metadata.name}" doesn't allow sandboxed, but ${platform} is sandboxed.`);
