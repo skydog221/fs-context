@@ -51,7 +51,6 @@ module.exports = packageJson.extension.platform.map(platform => {
             client: {
                 logging: "none"
             },
-            webSocketServer: false,
             headers: {
                 "Access-Control-Allow-Origin": "*"
             }
