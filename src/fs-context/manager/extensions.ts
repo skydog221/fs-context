@@ -1,7 +1,9 @@
-import { ContextEnvironment, ExtensionBuilder, ExtensionMetadata, ExtensionStored, pluginManager } from "fs-context";
+import { ContextEnvironment, ExtensionBuilder, ExtensionMetadata, ExtensionStored, pluginManager, ScratchRuntime } from "fs-context";
 
 export function createExtender(md: ExtensionMetadata): new () => ExtensionStored {
     return class implements ExtensionStored {
+        [key: string]: unknown;
+        runtime = null;
         constructor() {
             md.blocks.forEach(block => {
                 this[block.opcode] = block.action;
@@ -28,7 +30,6 @@ export function createExtender(md: ExtensionMetadata): new () => ExtensionStored
                 ]))
             }
         }
-        [key: string]: (args: any) => any;
     };
 }
 export function createContextEnvironment(extension: ExtensionBuilder): ContextEnvironment {
@@ -46,8 +47,9 @@ export function createContextEnvironment(extension: ExtensionBuilder): ContextEn
         }
     };
 }
-export function load(extension: ExtensionBuilder, platform: string) {
-    pluginManager.call(platform, "context", [createContextEnvironment(extension), (args) => {
-        //pass
+export function load(environment: ContextEnvironment, platform: string) {
+    pluginManager.call(platform, "context", [environment, (args: any[]) => {
+        const runtime = pluginManager.call(platform, "obtainRuntime", [environment, ...args]);
+        pluginManager.call(platform, "load", [environment, runtime, ...args]);
     }]);
 }

@@ -21,13 +21,15 @@ export interface ExtensionInfoStored {
 }
 export type ExtensionStored = {
     getInfo(): ExtensionInfoStored;
-} & Record<string, (args: any) => any>;
-export interface ScratchRuntime {
+    runtime?: ScratchRuntime;
+} & Record<string, unknown>;
+export interface BaseScratchRuntime {
     extensions: {
         unsandboxed: boolean;
         register(extension: ExtensionStored): void;
     }
 }
+export type ScratchRuntime = BaseScratchRuntime | null;
 export interface ContextEnvironment {
     window: Window;
     extension: ExtensionData;

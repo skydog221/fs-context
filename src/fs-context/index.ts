@@ -1,4 +1,6 @@
 import * as pluginManager from "./manager/plugins";
+import * as extensionManager from "./manager/extensions";
+
 import tw from "./plugins/turbowarp";
 import gandi from "./plugins/gandi";
 
@@ -16,4 +18,7 @@ export * from "./structs/stored";
 export * from "./structs/util";
 export * from "./structs/parser/compiltime";
 export * from "./structs/parser/runtime";
-export { pluginManager };
+export {
+    pluginManager,
+    extensionManager
+};

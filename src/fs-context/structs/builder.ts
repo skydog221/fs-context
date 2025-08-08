@@ -1,8 +1,8 @@
 import { ArgumentMap, BlockMetadata, Builder, ExtensionMetadata, MenuItem, MenuMetadata } from "fs-context";
 
 export interface ExtensionBuilder<
-    B extends BlockMetadata[] = [],
-    M extends MenuMetadata[] = []
+    B extends BlockMetadata[] = any,
+    M extends MenuMetadata[] = any
 > extends Builder<ExtensionMetadata<B, M>, ExtensionBuilder<B, M>> {
     block<N extends BlockMetadata>(md: N): ExtensionBuilder<[...B, N], M>;
     menu<N extends MenuMetadata>(md: N): ExtensionBuilder<B, [...M, N]>;
