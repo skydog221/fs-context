@@ -1,4 +1,4 @@
-import { ContextEnvironment, ExtensionBuilder, ExtensionMetadata, ExtensionStored, pluginManager, ScratchRuntime } from "fs-context";
+import { ContextEnvironment, ExtensionBuilder, ExtensionMetadata, ExtensionStored, pluginManager } from "fs-context";
 
 export function createExtender(md: ExtensionMetadata): new () => ExtensionStored {
     return class implements ExtensionStored {
