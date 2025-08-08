@@ -11,7 +11,7 @@ module.exports = packageJson.extension.platform.map(platform => {
     const filename = `[${platform}] ${packageJson.extension.name}@${packageJson.extension.version}.js`;
     return {
         name: platform,
-        entry: "@/extension.ts",
+        entry: "fs-context/entry.ts",
         resolve: {
             extensions: [".js", ".ts"],
             alias: Object.fromEntries(
@@ -57,7 +57,8 @@ module.exports = packageJson.extension.platform.map(platform => {
                     res.redirect(`/${filename}`);
                 });
                 return mw;
-            }
+            },
+            allowedHosts: "all"
         }
     };
 });
