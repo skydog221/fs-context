@@ -5,7 +5,7 @@ export default defineModLoader({
     obtainRuntime(environment) {
         return environment.window.Scratch;
     },
-    load(extension, runtime) {
-        runtime.extensions.register(extension.stored);
-    }
+    load(environment, runtime) {
+        runtime?.extensions.register(environment.extension.stored);
+    },
 });
