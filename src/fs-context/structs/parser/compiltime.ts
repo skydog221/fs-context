@@ -1,4 +1,5 @@
 import { InputType, InputTypeCast } from "../classify";
+import { ExtensionMetadata } from "../metadata";
 import { DeepReadonly } from "../util";
 
 export type FullArg = `[${string}${`:${InputType}` | ""}${`=${string}` | ""}]`;
@@ -25,6 +26,9 @@ export type FindArgumentTexts<T extends string> =
     T extends `${string}[${infer A}]${string}`
     ? [`[${A}]`, ...FindArgumentTexts<T extends `${string}[${string}]${infer B}` ? B : "">]
     : [];
-export type ArgumentMap<T extends string> = DeepReadonly<{
-    [K in FindArgumentTexts<T>[number]as FindName<K>]: InputTypeCast[FindType<K>];
+export type ArgumentMap<T extends string, L extends Record<string, any>> = DeepReadonly<{
+    [K in FindArgumentTexts<T>[number]as FindName<K>]:
+    // FindType<K> extends keyof L ?
+    // L[FindType<K>] :
+    InputTypeCast[FindType<K>];
 }>;

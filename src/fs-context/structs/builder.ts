@@ -1,20 +1,23 @@
 import { Builder } from "./interface";
-import { BlockMetadata, MenuMetadata, ExtensionMetadata, MenuItem } from "./metadata";
+import { BlockMetadata, MenuMetadata, ExtensionMetadata, MenuItem, LoaderMetadata } from "./metadata";
 import { ArgumentMap } from "./parser/compiltime";
 
 export interface ExtensionBuilder<
     B extends BlockMetadata[] = any,
-    M extends MenuMetadata[] = any
-> extends Builder<ExtensionMetadata<B, M>, ExtensionBuilder<B, M>> {
-    block<N extends BlockMetadata>(md: N): ExtensionBuilder<[...B, N], M>;
-    menu<N extends MenuMetadata>(md: N): ExtensionBuilder<B, [...M, N]>;
+    M extends MenuMetadata[] = any,
+    L extends Record<string, any> = any
+> extends Builder<ExtensionMetadata<B, M, L>, ExtensionBuilder<B, M, L>> {
+    block<N extends BlockMetadata>(md: N): ExtensionBuilder<[...B, N], M, L>;
+    menu<N extends MenuMetadata>(md: N): ExtensionBuilder<B, [...M, N], L>;
+    loader<N extends string, O>(name: N, md: LoaderMetadata<O>): ExtensionBuilder<B, M, L & { [K in N]: O }>;
 }
 export interface BlockBuilder<
     Text extends string = string,
-    Value = any
-> extends Builder<BlockMetadata<Text, Value>, BlockBuilder<Text, Value>> {
-    action<NewValue>(a: (args: ArgumentMap<Text>) => NewValue): BlockBuilder<Text, NewValue>;
-    text<NewText extends string>(t: NewText): BlockBuilder<NewText, Value>;
+    Value = any,
+    Loaders extends Record<string, any> = any
+> extends Builder<BlockMetadata<Text, Value, Loaders>, BlockBuilder<Text, Value, Loaders>> {
+    action<NewValue>(a: (args: ArgumentMap<Text, Loaders>) => NewValue): BlockBuilder<Text, NewValue, Loaders>;
+    text<NewText extends string>(t: NewText): BlockBuilder<NewText, Value, Loaders>;
 }
 export interface MenuBuilder<
     Name extends string = string,

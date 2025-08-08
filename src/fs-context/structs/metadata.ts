@@ -2,21 +2,26 @@ import { BlockType } from "./classify";
 import { ArgumentMap } from "./parser/compiltime";
 import { TextPart } from "./parser/runtime/text";
 
-export interface ExtensionMetadata<Blocks extends BlockMetadata[] = BlockMetadata[], Menus extends MenuMetadata[] = MenuMetadata[]> {
+export interface ExtensionMetadata<
+    Blocks extends BlockMetadata[] = BlockMetadata[],
+    Menus extends MenuMetadata[] = MenuMetadata[],
+    Loaders extends Record<string, any> = Record<string, any>
+> {
     id: string;
     name: string;
     description: string;
     blocks: Blocks;
     menus: Menus;
+    loaders: Loaders;
     allowSandbox: boolean;
 }
-export interface BlockMetadata<Text extends string = string, Value = any> {
+export interface BlockMetadata<Text extends string = string, Value = any, Loaders extends Record<string, any> = any> {
     parts(): TextPart[];
 
     opcode: string;
     text: Text;
     type: BlockType;
-    action: (args: ArgumentMap<Text>) => Value;
+    action: (args: ArgumentMap<Text, Loaders>) => Value;
 }
 export interface MenuItem<Key extends string = string, Value = any> {
     key: Key;
@@ -27,4 +32,7 @@ export interface MenuMetadata<Name extends string = string, Items extends MenuIt
     items: Items;
     reportable: boolean;
     readback?: (menu: MenuMetadata<Name, Items>) => MenuItem[];
+}
+export interface LoaderMetadata<Output = any> {
+    (args: string): Output;
 }

@@ -2,15 +2,16 @@ import { textParser } from "fs-context";
 import { ExtensionBuilder, BlockBuilder, MenuBuilder } from "./builder";
 import { blockTypes, BlockType } from "./classify";
 import { BlockTypeSelector } from "./interface";
-import { BlockMetadata, MenuMetadata, MenuItem } from "./metadata";
+import { BlockMetadata, MenuMetadata, MenuItem, LoaderMetadata, ExtensionMetadata } from "./metadata";
 import { ArgumentMap } from "./parser/compiltime";
 
-export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata[] = []>(id: string): ExtensionBuilder<B, M> {
+export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata[] = [], L extends Record<string, LoaderMetadata> = Record<string, LoaderMetadata>>(id: string): ExtensionBuilder<B, M, L> {
     let name = "Example extension";
     let description = "This is a example extension";
     let allowSandbox = true;
     const blocks: B = [] as unknown as B;
     const menus: M = [] as unknown as M;
+    const loaders: L = {} as unknown as L;
     return {
         id(v) {
             id = v;
@@ -32,6 +33,10 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
             menus.push(...v);
             return this;
         },
+        loaders(v) {
+            Object.assign(loaders, v);
+            return this;
+        },
         menu<N extends MenuMetadata>(md: N): ExtensionBuilder<B, [...M, N]> {
             menus.push(md);
             return this as unknown as ExtensionBuilder<B, [...M, N]>;
@@ -39,6 +44,10 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
         block<N extends BlockMetadata>(md: N): ExtensionBuilder<[...B, N], M> {
             blocks.push(md);
             return this as unknown as ExtensionBuilder<[...B, N], M>;
+        },
+        loader<N extends string, O>(name: N, md: LoaderMetadata<O>): ExtensionBuilder<B, M, L & { [K in N]: O; }> {
+            loaders[name] = md as unknown as L[N];
+            return this as unknown as ExtensionBuilder<B, M, L & { [K in N]: O; }>;
         },
         allowSandbox(v) {
             allowSandbox = v;
@@ -51,6 +60,7 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
                 description,
                 blocks,
                 menus,
+                loaders,
                 allowSandbox
             };
         }
@@ -60,7 +70,7 @@ export const blockType = new Proxy({}, {
     get(_, prop) {
         if (blockTypes.includes(prop as BlockType)) {
             let blockType = prop as BlockType;
-            return <T extends string, V>(opcode: string): BlockBuilder<T, V> => {
+            return <L extends Record<string, any> = any, T extends string = string, V = any>(opcode: string): BlockBuilder<T, V, L> => {
                 let text = "" as unknown as T;
                 let action = (_: any) => {
                     return undefined as unknown as V;
@@ -70,13 +80,13 @@ export const blockType = new Proxy({}, {
                         opcode = v;
                         return this;
                     },
-                    action<NV>(v: ((args: ArgumentMap<T>) => V & NV)) {
+                    action<NV>(v: ((args: ArgumentMap<T, L>) => V & NV)) {
                         action = v;
-                        return this as unknown as BlockBuilder<T, NV>;
+                        return this as unknown as BlockBuilder<T, NV, L>;
                     },
                     text<NT extends string>(t: NT & T) {
                         text = t;
-                        return this as unknown as BlockBuilder<NT, V>;
+                        return this as unknown as BlockBuilder<NT, V, L>;
                     },
                     type(v) {
                         blockType = v;

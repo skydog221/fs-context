@@ -8,5 +8,5 @@ export type Builder<T, ChainNext extends Builder<T> = Builder<T, any>> = Buildab
     [K in keyof T]: (v: T[K]) => ChainNext;
 };
 export type BlockTypeSelector = {
-    [T in BlockType]: (opcode: string) => BlockBuilder;
+    [T in BlockType]: <L extends Record<string, any>, T extends string = string, V = any>(opcode: string) => BlockBuilder<T, V, L>;
 };

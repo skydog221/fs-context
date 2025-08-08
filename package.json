@@ -2,10 +2,11 @@
     "name": "fs-context",
     "version": "2.0.0",
     "scripts": {
-        "lint": "eslint .",
+        "check:lint": "eslint .",
+        "check:type": "tsc --noEmit",
+        "fix": "eslint . --fix",
         "build": "cross-env NODE_ENV=production webpack",
-        "dev": "cross-env NODE_ENV=development webpack serve --config-name",
-        "check-type": "tsc --noEmit"
+        "dev": "cross-env NODE_ENV=development webpack serve --config-name"
     },
     "extension": {
         "name": "example-extension",

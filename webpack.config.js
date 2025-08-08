@@ -64,6 +64,7 @@ module.exports = packageJson.extension.platform.map(platform => {
             },
             allowedHosts: "all"
         },
-        mode: process.env.NODE_ENV
+        mode: process.env.NODE_ENV,
+        stats: "errors-warnings"
     };
 });
