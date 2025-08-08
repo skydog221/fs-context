@@ -12,7 +12,9 @@
         "version": "1.0.0",
         "platform": [
             "tw",
-            "gandi"
+            "gandi",
+            "clipcc",
+            "ccw"
         ],
         "author": "陨落基围虾"
     },

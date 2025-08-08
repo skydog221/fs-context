@@ -8,6 +8,9 @@ export function register(loader: ModLoadable) {
 export function unregister(id: string) {
     delete registered[id];
 }
+export function getRegistered() {
+    return Object.keys(registered);
+}
 export function call<
     K extends KeyOfButMatch<ModLoadable, ((...args: any[]) => any) | undefined>
 >(id: string, event: K, args: Parameters<NonNullable<ModLoadable[K]>>): {

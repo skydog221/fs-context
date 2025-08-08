@@ -3,5 +3,4 @@ import add from "./blocks/add";
 
 export default extension("fourcalc")
     .name("四则运算")
-    .allowSandbox(false)
     .block(add.build());
