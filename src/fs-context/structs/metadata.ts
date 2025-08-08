@@ -1,4 +1,5 @@
-import { ArgumentMap, BlockType } from "fs-context";
+import { BlockType } from "./classify";
+import { ArgumentMap } from "./parser/compiltime";
 
 export interface ExtensionMetadata<Blocks extends BlockMetadata[] = BlockMetadata[], Menus extends MenuMetadata[] = MenuMetadata[]> {
     id: string;

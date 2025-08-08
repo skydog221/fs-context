@@ -1,4 +1,6 @@
-import { BlockType, ExtensionBuilder, ExtensionMetadata } from "fs-context";
+import { ExtensionBuilder } from "./builder";
+import { BlockType } from "./classify";
+import { ExtensionMetadata } from "./metadata";
 
 export interface BlockStored {
     opcode: string;

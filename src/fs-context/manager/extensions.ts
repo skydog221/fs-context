@@ -1,4 +1,7 @@
-import { ContextEnvironment, ExtensionBuilder, ExtensionMetadata, ExtensionStored, pluginManager } from "fs-context";
+import { pluginManager } from "fs-context";
+import { ExtensionBuilder } from "fs-context/structs/builder";
+import { ExtensionMetadata } from "fs-context/structs/metadata";
+import { ExtensionStored, ContextEnvironment } from "fs-context/structs/stored";
 
 export function createExtender(md: ExtensionMetadata): new () => ExtensionStored {
     return class implements ExtensionStored {

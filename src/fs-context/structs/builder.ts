@@ -1,4 +1,6 @@
-import { ArgumentMap, BlockMetadata, Builder, ExtensionMetadata, MenuItem, MenuMetadata } from "fs-context";
+import { Builder } from "./interface";
+import { BlockMetadata, MenuMetadata, ExtensionMetadata, MenuItem } from "./metadata";
+import { ArgumentMap } from "./parser/compiltime";
 
 export interface ExtensionBuilder<
     B extends BlockMetadata[] = any,

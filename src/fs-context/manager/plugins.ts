@@ -1,4 +1,5 @@
-import { KeyOfButMatch, ModLoadable } from "fs-context";
+import { ModLoadable } from "fs-context/structs/plugin";
+import { KeyOfButMatch } from "fs-context/structs/util";
 
 const registered: Record<string, ModLoadable> = {};
 export function register(loader: ModLoadable) {

@@ -1,4 +1,4 @@
-import { defineModLoader } from "fs-context";
+import { defineModLoader } from "fs-context/structs/plugin";
 
 declare const window: Window & {
     tempExt: any;

@@ -1,4 +1,4 @@
-import { ContextEnvironment, ScratchRuntime } from "fs-context";
+import { ContextEnvironment, ScratchRuntime } from "fs-context/structs/stored";
 
 /**
  * @description 指的是“ScratchMod”的加载器，不是传统意义的“模组”
@@ -14,3 +14,4 @@ export interface ModLoadable {
 export function defineModLoader(loader: ModLoadable) {
     return loader;
 }
+console.log(exports);
