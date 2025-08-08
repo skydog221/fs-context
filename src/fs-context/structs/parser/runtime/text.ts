@@ -1,4 +1,4 @@
-import { InputType } from "fs-context/structs/classify";
+import { casterMap, InputType } from "fs-context/structs/classify";
 import { unquote } from "fs-context/structs/util";
 import { regexMap } from "./base";
 import { BlockArgumentStored } from "fs-context/structs/stored";
@@ -59,10 +59,10 @@ export function toParts(text: string): TextPart[] {
 export function storeArg(part: TextPart): BlockArgumentStored | null {
     if (part.type === "arg") {
         const result: BlockArgumentStored = {
-            type: part.inputType
+            type: part.inputType,
         };
         if (part.defaultValue) {
-            result.defaultValue = part.defaultValue;
+            result.defaultValue = casterMap[part.inputType](part.defaultValue);
         }
         if (part.inputType === "menu") {
             result.menu = part.defaultValue || part.content;

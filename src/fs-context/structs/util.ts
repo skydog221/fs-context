@@ -4,7 +4,7 @@ export type KeyOfButMatch<T, M> = keyof {
 };
 export type Empty = null | undefined | never | void;
 export function unquote(str: string) {
-    if (str.startsWith('"') && str.endsWith('"')) {
+    if (str.startsWith("\"") && str.endsWith("\"")) {
         return str.slice(1, -1);
     }
     return str;

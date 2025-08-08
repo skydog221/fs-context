@@ -1,7 +1,6 @@
-import { pluginManager, textParser } from "fs-context";
+import { menuParser, pluginManager, textParser } from "fs-context";
 import { ExtensionBuilder } from "fs-context/structs/builder";
 import { ExtensionMetadata } from "fs-context/structs/metadata";
-import { storeItem } from "fs-context/structs/parser/runtime/menu";
 import { ExtensionStored, ContextEnvironment } from "fs-context/structs/stored";
 
 export function createExtender(md: ExtensionMetadata): new () => ExtensionStored {
@@ -16,7 +15,7 @@ export function createExtender(md: ExtensionMetadata): new () => ExtensionStored
         getInfo() {
             return {
                 id: md.id,
-                name: md.name,
+                name: `${md.name}${fsContext.developing ? "(Debug)" : ""}`,
                 blocks: md.blocks.map(blockMd => ({
                     opcode: blockMd.opcode,
                     blockType: blockMd.type,
@@ -24,12 +23,12 @@ export function createExtender(md: ExtensionMetadata): new () => ExtensionStored
                     arguments: Object.fromEntries(blockMd.parts().map(part => [
                         part.content,
                         textParser.storeArg(part)
-                    ]).filter(Boolean))
+                    ]).filter(part => Boolean(part[1])))
                 })),
                 menus: Object.fromEntries(md.menus.map(menuMd => [
                     menuMd.name,
                     {
-                        items: menuMd.items.map(storeItem),
+                        items: menuMd.items.map(menuParser.storeItem),
                         acceptReporters: menuMd.reportable
                     }
                 ]))
