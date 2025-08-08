@@ -8,6 +8,7 @@ export interface ExtensionMetadata<Blocks extends BlockMetadata[] = BlockMetadat
     description: string;
     blocks: Blocks;
     menus: Menus;
+    allowSandbox: boolean;
 }
 export interface BlockMetadata<Text extends string = string, Value = any> {
     parts(): TextPart[];

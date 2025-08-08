@@ -57,6 +57,15 @@ export function obtainRuntime(environment: ContextEnvironment, platform: string,
 export function load(environment: ContextEnvironment, platform: string) {
     function callLoad() {
         const runtime = obtainRuntime(environment, platform, ...contextData);
+        const isSandboxed = pluginManager.call(platform, "isSandboxed", [environment, runtime]).data;
+        if (fsContext.developing) {
+            console.log("Runtime obtained:", runtime);
+            console.log("Sandbox status:", isSandboxed);
+        }
+        if (!environment.extension.metadata.allowSandbox && isSandboxed) {
+            throw new Error(`Extension "${environment.extension.metadata.name}" doesn't allow sandboxed, but ${platform} is sandboxed.`);
+        }
+        environment.extension.stored.runtime = runtime;
         pluginManager.call(platform, "load", [environment, runtime, ...contextData]);
     }
     let contextData: any[] = [];

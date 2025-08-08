@@ -17,5 +17,8 @@ export default defineModLoader({
     obtainRuntime(_, ...contextData) {
         return contextData[0];
     },
-    load() { }
+    load() { },
+    isSandboxed(_, runtime) {
+        return !runtime?.extensions.unsandboxed;
+    },
 });

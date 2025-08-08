@@ -1,6 +1,7 @@
 import extension from "@/extension";
 import { extensionManager } from "fs-context";
 
+console.log("---");
 console.log(`Loading extension ${fsContext.extension.name}@${fsContext.extension.author}-v${fsContext.extension.version} on platform "${fsContext.platform}".`);
 
 const env = extensionManager.createContextEnvironment(extension);
@@ -10,4 +11,5 @@ if (fsContext.developing) {
     console.log("Stored extension:", env.extension.stored);
     console.log("getInfo():", env.extension.stored.getInfo());
 }
+console.log("---");
 extensionManager.load(env, fsContext.platform);

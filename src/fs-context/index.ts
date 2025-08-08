@@ -1,5 +1,6 @@
 import * as pluginManager from "./manager/plugins";
 import * as extensionManager from "./manager/extensions";
+import "./structs/parser/runtime/color";
 
 import tw from "./plugins/turbowarp";
 import gandi from "./plugins/gandi";

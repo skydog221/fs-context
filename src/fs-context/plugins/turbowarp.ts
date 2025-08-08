@@ -8,4 +8,7 @@ export default defineModLoader({
     load(environment, runtime) {
         runtime?.extensions.register(environment.extension.stored);
     },
+    isSandboxed(_, runtime) {
+        return !runtime?.extensions.unsandboxed;
+    },
 });

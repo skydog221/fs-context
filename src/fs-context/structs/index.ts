@@ -8,6 +8,7 @@ import { ArgumentMap } from "./parser/compiltime";
 export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata[] = []>(id: string): ExtensionBuilder<B, M> {
     let name = "Example extension";
     let description = "This is a example extension";
+    let allowSandbox = true;
     const blocks: B = [] as unknown as B;
     const menus: M = [] as unknown as M;
     return {
@@ -39,13 +40,18 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
             blocks.push(md);
             return this as unknown as ExtensionBuilder<[...B, N], M>;
         },
+        allowSandbox(v) {
+            allowSandbox = v;
+            return this;
+        },
         build() {
             return {
                 id,
                 name,
                 description,
                 blocks,
-                menus
+                menus,
+                allowSandbox
             };
         }
     }
