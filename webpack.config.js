@@ -1,8 +1,8 @@
 const path = require("path");
-const fs = require("fs");
 const webpack = require("webpack");
 
 const Webpackbar = require("webpackbar");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const tsconfigJson = require("./tsconfig.json");
 const packageJson = require("./package.json");
@@ -46,15 +46,18 @@ module.exports = packageJson.extension.platform.map(platform => {
          * @type {import('webpack-dev-server').Configuration}
          */
         devServer: {
-            port: 25565,
+            port: 7777,
             setupExitSignals: false,
+            webSocketServer: false,
             client: {
                 logging: "none"
             },
-            headers: {
-                "Access-Control-Allow-Origin": "*"
+            setupMiddlewares(mw, server) {
+                server.app.get("/", (_, res) => {
+                    res.redirect(`/${filename}`);
+                });
+                return mw;
             }
-        },
-        stats: "none"
+        }
     };
 });
