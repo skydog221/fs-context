@@ -11,7 +11,7 @@ export interface ExtensionBuilder<
     block<N extends BlockMetadata>(md: N): ExtensionBuilder<[...B, N], M, L>;
     menu<N extends MenuMetadata>(md: N): ExtensionBuilder<B, [...M, N], L>;
     loader<N extends string, O>(name: N, md: LoaderMetadata<O>): ExtensionBuilder<B, M, L & { [K in N]: O }>;
-    theme(color: HexColorString, offset: number): ExtensionBuilder<B, M, L>;
+    theme(color: HexColorString, offset?: number): ExtensionBuilder<B, M, L>;
 }
 export interface BlockBuilder<
     Text extends string = string,
@@ -27,5 +27,5 @@ export interface MenuBuilder<
     Extension extends ExtensionMetadata = ExtensionMetadata
 > extends Builder<MenuMetadata<Name, Items>, MenuBuilder<Name, Items, Extension>> {
     name<N extends string>(name: N): MenuBuilder<N, Items, Extension>;
-    item<K extends string, V, N extends MenuItem<K, V>>(key: K, value: V): MenuBuilder<Name, [...Items, N], Extension>;
+    item<K extends string, V extends string, N extends MenuItem<K, V>>(key: K, value?: V): MenuBuilder<Name, [...Items, N], Extension>;
 }

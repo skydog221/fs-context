@@ -29,7 +29,7 @@ export interface MenuItem<Key extends string = string, Value = any> {
     key: Key;
     value: Value;
 }
-export interface MenuMetadata<Name extends string = string, Items extends MenuItem[] = MenuItem[]> {
+export interface MenuMetadata<Name extends string = any, Items extends MenuItem[] = any> {
     name: Name;
     items: Items;
     reportable: boolean;

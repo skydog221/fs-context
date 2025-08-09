@@ -17,6 +17,6 @@ export function toMenuItem(inputString: string): MenuItem[] {
 export function storeItem(item: MenuItem): MenuItemStored {
     return {
         text: item.key,
-        value: item.value,
+        value: item.value ?? item.key,
     };
 }

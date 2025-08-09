@@ -61,13 +61,15 @@ export function toParts(text: string): TextPart[] {
 export function storeArg(part: TextPart): BlockArgumentStored | null {
     if (part.type === "arg") {
         const result: BlockArgumentStored = {
-            type: isInternalType(part.inputType) ? part.inputType : "string",
+            type: "string",
         };
-        if (part.defaultValue) {
-            result.defaultValue = casterMap[part.inputType](part.defaultValue);
+        if (isInternalType(part.inputType) && part.inputType !== "menu") {
+            result.type = part.inputType;
         }
         if (part.inputType === "menu") {
             result.menu = part.defaultValue || part.content;
+        } else if (part.defaultValue) {
+            result.defaultValue = casterMap[part.inputType](part.defaultValue);
         }
         return result;
     } else {
