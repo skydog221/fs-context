@@ -1,11 +1,11 @@
-import { HexColorString } from "fs-context/structs/util";
+import { DeepReadonly, HexColorString } from "fs-context/structs/util";
 import { regexMap } from "./base";
 
-export interface ColorRGB<R extends number = number, G extends number = number, B extends number = number> {
+export type ColorRGB<R extends number = number, G extends number = number, B extends number = number> = DeepReadonly<{
     r: R;
     g: G;
     b: B;
-}
+}>;
 export function fix(value: string): HexColorString {
     if (regexMap.COLOR.test(value)) {
         return value as HexColorString;

@@ -1,5 +1,5 @@
 import { InputType, InputTypeCast } from "../classify";
-import { DeepReadonly, FixStringName, ToString } from "../util";
+import { DeepReadonly, FixStringName, HexColorString, ToString } from "../util";
 import { ColorRGB } from "./runtime/color";
 
 export type FullArg = `[${string}${`:${InputType}` | ""}${`=${string}` | ""}]`;
@@ -62,12 +62,20 @@ export type Subtract<A extends number, B extends number> =
     never;
 export type Numbers = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 export type HexLetters = "a" | "b" | "c" | "d" | "e" | "f";
-export type HexChars = Lowercase<HexLetters> | Uppercase<HexLetters> | ToString<Numbers>;
-export type HexMap2<H extends `${HexChars}${HexChars}`> = {
-    [A in HexChars]: {
-        [B in HexChars]: Add<Multiply<HexCharToNumber<A>, 16> & number, HexCharToNumber<B>>
-    }
-}[H extends `${infer A extends HexChars}${HexChars}` ? A : never][H extends `${infer A extends HexChars}${HexChars}` ? A : never];
+export type HexChars2 = `${HexChars}${HexChars}`;
+export type HexChars = Lowercase<HexLetters> | ToString<Numbers>;
+export type HexMap2<H extends HexChars2> =
+    {
+        [K in `${HexChars}${HexChars}`]: Add<
+            Multiply<
+                HexCharToNumber<
+                    K extends `${infer A extends HexChars}${HexChars}` ? A : never
+                >, 16
+            > & number, HexCharToNumber<
+                K extends `${HexChars}${infer B extends HexChars}` ? B : never
+            >
+        >
+    }[H];
 export type HexCharToNumber<H extends HexChars> = ({
     [K in Numbers as ToString<K>]: K;
 } & {
@@ -77,10 +85,14 @@ export type HexCharToNumber<H extends HexChars> = ({
     d: 13;
     e: 14;
     f: 15;
-    A: 10;
-    B: 11;
-    C: 12;
-    D: 13;
-    E: 14;
-    F: 15;
 })[H];
+export type HexToRGB<H extends HexColorString> = ColorRGB<
+    HexMap2<H extends `#${infer R extends HexChars2}${string}` ? R : never>,
+    HexMap2<H extends `#${HexChars2}${infer G extends HexChars2}${string}` ? G : never>,
+    HexMap2<H extends `#${string}${infer B extends HexChars2}` ? B : never>
+>
+let a: HexToRGB<"#ff0000"> = {
+    r: 255,
+    g: 10,
+    b: 0
+};
