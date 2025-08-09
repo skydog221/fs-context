@@ -16,6 +16,7 @@ export type InputTypeCastWithUnknown = InputTypeCast & {
     unknown: unknown;
 };
 export type InputType = keyof InputTypeCast;
+export type InputTypeStored = Exclude<InputType, "hat-param" | "bool"> | "Boolean" | "ccw_hat_parameter";
 export const casterMap: {
     [K in InputType]: (value: string) => InputTypeCast[K]
 } = {

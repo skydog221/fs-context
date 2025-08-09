@@ -1,4 +1,4 @@
-import { InputType } from "./classify";
+import { InputType, InputTypeStored } from "./classify";
 import { ExtensionBuilder } from "./builder";
 import { BlockType } from "./classify";
 import { ExtensionMetadata } from "./metadata";
@@ -11,7 +11,7 @@ export interface BlockStored {
     arguments: Record<string, BlockArgumentStored>;
 }
 export interface BlockArgumentStored {
-    type: InputType;
+    type: InputTypeStored;
     defaultValue?: any;
     menu?: string;
 }

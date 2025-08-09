@@ -1,4 +1,4 @@
-import extension from "@/extension";
+import extension from "./config";
 import { extensionManager, pluginManager } from "fs-context";
 
 console.log(`Loading "${fsContext.extension.name} v${fsContext.extension.version}" on ${fsContext.platform}.`);

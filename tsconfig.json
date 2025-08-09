@@ -22,11 +22,14 @@
             "package.json": [
                 "package.json"
             ],
+            "fs-context/*": [
+                "src/fs-context/*"
+            ],
             "@/*": [
                 "src/extension/*"
             ],
-            "fs-context/*": [
-                "src/fs-context/*"
+            "@sample/*": [
+                "src/fs-context/samples/*"
             ]
         }
     },
