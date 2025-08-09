@@ -1,5 +1,5 @@
 import { BlockType } from "./classify";
-import { ArgumentMap } from "./parser/compiltime";
+import { ArgumentMap, DefaultMap } from "./parser/compiltime";
 import { TextPart } from "./parser/runtime/text";
 
 export interface ExtensionMetadata<
@@ -21,7 +21,7 @@ export interface BlockMetadata<Text extends string = string, Value = any, Loader
     opcode: string;
     text: Text;
     type: BlockType;
-    action: (args: ArgumentMap<Text, Loaders>) => Value;
+    action: (args: ArgumentMap<Text, Loaders>, defaults: DefaultMap<Text>) => Value;
 }
 export interface MenuItem<Key extends string = string, Value = any> {
     key: Key;

@@ -1,4 +1,4 @@
-export type HexColorString = `#${string}`;
+export type HexColorString<C extends string = string> = `#${C}`;
 export type KeyOfButMatch<T, M> = keyof {
     [K in keyof T as T[K] extends M ? K : never]: never;
 };
@@ -9,6 +9,8 @@ export type DeepReadonly<T> = {
 export type Unquote<T extends string> = T extends `"${infer U}"` ? U : T;
 export type Trim<T extends string> = T extends ` ${infer U}` | `${infer U} ` ? Trim<U> : T;
 export type FixStringName<T extends string> = Trim<Unquote<Trim<T>>>;
+export type ToNumber<S extends string> = S extends `${infer N extends number}` ? N : never;
+export type ToString<N extends number> = `${N}`;
 export function unquote(str: string) {
     if (str.startsWith("\"") && str.endsWith("\"")) {
         return str.slice(1, -1);

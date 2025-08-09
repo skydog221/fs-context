@@ -1,6 +1,6 @@
 import { Builder } from "./interface";
 import { BlockMetadata, MenuMetadata, ExtensionMetadata, MenuItem, LoaderMetadata } from "./metadata";
-import { ArgumentMap } from "./parser/compiltime";
+import { ArgumentMap, DefaultMap } from "./parser/compiltime";
 
 export interface ExtensionBuilder<
     B extends BlockMetadata[] = any,
@@ -16,7 +16,7 @@ export interface BlockBuilder<
     Value = any,
     Loaders extends Record<string, any> = any
 > extends Builder<BlockMetadata<Text, Value, Loaders>, BlockBuilder<Text, Value, Loaders>> {
-    action<NewValue>(a: (args: ArgumentMap<Text, Loaders>) => NewValue): BlockBuilder<Text, NewValue, Loaders>;
+    action<NewValue>(method: (args: ArgumentMap<Text, Loaders>, defaults: DefaultMap<Text>) => NewValue): BlockBuilder<Text, NewValue, Loaders>;
     text<NewText extends string>(t: NewText): BlockBuilder<NewText, Value, Loaders>;
 }
 export interface MenuBuilder<

@@ -1,10 +1,10 @@
 import { HexColorString } from "fs-context/structs/util";
 import { regexMap } from "./base";
 
-export interface ColorRGB {
-    r: number;
-    g: number;
-    b: number;
+export interface ColorRGB<R extends number = number, G extends number = number, B extends number = number> {
+    r: R;
+    g: G;
+    b: B;
 }
 export function fix(value: string): HexColorString {
     if (regexMap.COLOR.test(value)) {

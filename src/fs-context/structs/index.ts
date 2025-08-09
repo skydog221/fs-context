@@ -2,8 +2,8 @@ import { textParser } from "fs-context";
 import { ExtensionBuilder, BlockBuilder, MenuBuilder } from "./builder";
 import { blockTypes, BlockType } from "./classify";
 import { BlockTypeSelector } from "./interface";
-import { BlockMetadata, MenuMetadata, MenuItem, LoaderMetadata, ExtensionMetadata } from "./metadata";
-import { ArgumentMap } from "./parser/compiltime";
+import { BlockMetadata, MenuMetadata, MenuItem, LoaderMetadata } from "./metadata";
+import { ArgumentMap, DefaultMap } from "./parser/compiltime";
 
 export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata[] = [], L extends Record<string, LoaderMetadata> = Record<string, LoaderMetadata>>(id: string): ExtensionBuilder<B, M, L> {
     let name = "Example extension";
@@ -72,15 +72,13 @@ export const blockType = new Proxy({}, {
             let blockType = prop as BlockType;
             return <L extends Record<string, any> = any, T extends string = string, V = any>(opcode: string): BlockBuilder<T, V, L> => {
                 let text = "" as unknown as T;
-                let action = (_: any) => {
-                    return undefined as unknown as V;
-                };
+                let action = (_: any, __: any) => null as unknown as V;
                 return {
                     opcode(v) {
                         opcode = v;
                         return this;
                     },
-                    action<NV>(v: ((args: ArgumentMap<T, L>) => V & NV)) {
+                    action<NV>(v: ((args: ArgumentMap<T, L>, defaults: DefaultMap<T>) => V & NV)) {
                         action = v;
                         return this as unknown as BlockBuilder<T, NV, L>;
                     },
