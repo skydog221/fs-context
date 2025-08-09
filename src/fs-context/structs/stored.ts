@@ -1,12 +1,11 @@
-import { InputType, InputTypeStored } from "./classify";
+import { BlockTypeStored, InputTypeStored } from "./classify";
 import { ExtensionBuilder } from "./builder";
-import { BlockType } from "./classify";
 import { ExtensionMetadata } from "./metadata";
 import { HexColorString } from "./util";
 
 export interface BlockStored {
     opcode: string;
-    blockType: BlockType;
+    blockType: BlockTypeStored;
     text: string;
     arguments: Record<string, BlockArgumentStored>;
 }

@@ -1,4 +1,4 @@
-import { menuParser, pluginManager, textParser } from "fs-context";
+import { blockTypeParser, menuParser, pluginManager, textParser } from "fs-context";
 import { ExtensionBuilder } from "fs-context/structs/builder";
 import { ExtensionMetadata } from "fs-context/structs/metadata";
 import { isInternalType } from "fs-context/structs/parser/runtime/text";
@@ -46,7 +46,7 @@ export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) 
                 name: `${md.name}${fsContext.developing ? "(Debug)" : ""}`,
                 blocks: md.blocks.map(blockMd => ({
                     opcode: blockMd.opcode,
-                    blockType: blockMd.type,
+                    blockType: blockTypeParser.store(blockMd.type),
                     text: textParser.storeText(blockMd.text),
                     arguments: Object.fromEntries(blockMd.parts().map(part => [
                         part.content,

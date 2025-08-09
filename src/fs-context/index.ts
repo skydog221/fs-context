@@ -11,6 +11,8 @@ export * as textParser from "./structs/parser/runtime/text";
 export * as colorParser from "./structs/parser/runtime/color";
 export * as menuParser from "./structs/parser/runtime/menu";
 export * as numberParser from "./structs/parser/runtime/number";
+export * as argumentTypeParser from "./structs/parser/runtime/argumentType";
+export * as blockTypeParser from "./structs/parser/runtime/blockType";
 export {
     pluginManager,
     extensionManager

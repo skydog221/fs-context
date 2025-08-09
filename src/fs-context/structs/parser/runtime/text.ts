@@ -2,7 +2,7 @@ import { casterMap, InputType, inputTypes } from "fs-context/structs/classify";
 import { unquote } from "fs-context/structs/util";
 import { regexMap } from "./base";
 import { BlockArgumentStored } from "fs-context/structs/stored";
-import { toStoredType } from "./argumentType";
+import { argumentTypeParser } from "fs-context";
 
 export interface TextPart {
     type: "text" | "arg";
@@ -65,7 +65,7 @@ export function storeArg(part: TextPart): BlockArgumentStored | null {
             type: "string",
         };
         if (isInternalType(part.inputType) && part.inputType !== "menu") {
-            result.type = toStoredType(part.inputType);
+            result.type = argumentTypeParser.store(part.inputType);
         }
         if (part.inputType === "menu") {
             result.menu = part.defaultValue || part.content;
