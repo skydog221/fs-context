@@ -1,9 +1,9 @@
 import { InputType, InputTypeCast } from "../classify";
-import { ExtensionMetadata } from "../metadata";
-import { DeepReadonly } from "../util";
+import { DeepReadonly, FixStringName } from "../util";
 
 export type FullArg = `[${string}${`:${InputType}` | ""}${`=${string}` | ""}]`;
-export type FindName<A extends FullArg> = A extends `[${infer N}:${string}=${string}]`
+export type FindName<A extends FullArg> = FixStringName<
+    A extends `[${infer N}:${string}=${string}]`
     ? N
     : A extends `[${infer N}:${string}]`
     ? N
@@ -11,17 +11,22 @@ export type FindName<A extends FullArg> = A extends `[${infer N}:${string}=${str
     ? N
     : A extends `[${infer N}]`
     ? N
-    : never;
-export type FindType<A extends FullArg> = A extends `[${string}:${infer T extends InputType}=${string}]`
-    ? T
-    : A extends `[${string}:${infer T extends InputType}]`
-    ? T
-    : "string";
-export type FindValue<A extends FullArg> = A extends `[${string}:${string}=${infer V}]`
+    : never
+>;
+export type FindType<A extends FullArg> = FixStringName<
+    A extends `[${string}:${infer T}=${string}]`
+    ? FixStringName<T> extends InputType ? T : '"string"'
+    : A extends `[${string}:${infer T}]`
+    ? FixStringName<T> extends InputType ? T : '"string"'
+    : '"string"'
+>;
+export type FindValue<A extends FullArg> = FixStringName<
+    A extends `[${string}:${string}=${infer V}]`
     ? V
     : A extends `[${string}=${infer V}]`
     ? V
-    : "";
+    : ""
+>;
 export type FindArgumentTexts<T extends string> =
     T extends `${string}[${infer A}]${string}`
     ? [`[${A}]`, ...FindArgumentTexts<T extends `${string}[${string}]${infer B}` ? B : "">]
