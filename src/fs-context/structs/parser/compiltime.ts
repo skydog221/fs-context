@@ -35,8 +35,6 @@ export type FindArgumentTexts<T extends string> =
     : [];
 export type ArgumentMap<T extends string, _L extends Record<string, any>> = DeepReadonly<{
     [K in FindArgumentTexts<T>[number]as FindName<K>]: InputTypeCast[FindType<K>];
-    // FindType<K> extends keyof L ?
-    // L[FindType<K>] :
 }>;
 export type DefaultMap<T extends string> = DeepReadonly<{
     [K in FindArgumentTexts<T>[number]as FindName<K>]: ParseValue<FindValue<K>>;
