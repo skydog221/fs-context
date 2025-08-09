@@ -162,3 +162,22 @@ export function menu<N extends string, I extends MenuItem[]>(name: N): MenuBuild
         }
     }
 }
+export type StoreSelf<T extends object> = {
+    [K in keyof T]: T[K];
+} & {
+    data: T;
+    read<K extends keyof T>(key: K): T[K];
+    write<K extends keyof T>(key: K, value: T[K]): void;
+}
+export function remoteStore<T extends object>(data: T): StoreSelf<T> {
+    return {
+        ...data,
+        data,
+        read(key) {
+            return data[key];
+        },
+        write(key, value) {
+            data[key] = value;
+        }
+    };
+}
