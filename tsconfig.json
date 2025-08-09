@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "ESNext",
-        "module": "ESNext",
+        "module": "commonjs",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,
@@ -16,11 +16,14 @@
         ],
         "baseUrl": ".",
         "paths": {
-            "@/*": [
-                "src/extension/*"
-            ],
             "fs-context": [
                 "src/fs-context/index"
+            ],
+            "package.json": [
+                "package.json"
+            ],
+            "@/*": [
+                "src/extension/*"
             ],
             "fs-context/*": [
                 "src/fs-context/*"

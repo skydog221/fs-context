@@ -1,6 +1,5 @@
 import { InputType, InputTypeCast } from "../classify";
-import { DeepReadonly, FixStringName, HexColorString, ToString } from "../util";
-import { ColorRGB } from "./runtime/color";
+import { DeepReadonly, FixStringName, HexColorString } from "../util";
 
 export type FullArg = `[${string}${`:${InputType}` | ""}${`=${string}` | ""}]`;
 export type FindName<A extends FullArg> = FixStringName<
