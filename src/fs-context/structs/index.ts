@@ -43,15 +43,15 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
         },
         menu<N extends MenuMetadata>(md: N): ExtensionBuilder<B, [...M, N]> {
             menus.push(md);
-            return this as unknown as ExtensionBuilder<B, [...M, N]>;
+            return this as any;
         },
         block<N extends BlockMetadata>(md: N): ExtensionBuilder<[...B, N], M> {
             blocks.push(md);
-            return this as unknown as ExtensionBuilder<[...B, N], M>;
+            return this as any;
         },
         loader<N extends string, O>(name: N, md: LoaderMetadata<O>): ExtensionBuilder<B, M, L & { [K in N]: O; }> {
             loaders[name] = md as unknown as L[N];
-            return this as unknown as ExtensionBuilder<B, M, L & { [K in N]: O; }>;
+            return this as any;
         },
         allowSandbox(v) {
             allowSandbox = v;
