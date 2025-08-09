@@ -1,4 +1,4 @@
-import { InputType, InputTypeCast } from "../classify";
+import { InputType, InputTypeCastWithUnknown } from "../classify";
 import { DeepReadonly, FixStringName, HexColorString } from "../util";
 
 export type FullArg = `[${string}${`:${InputType}` | ""}${`=${string}` | ""}]`;
@@ -13,13 +13,13 @@ export type FindName<A extends FullArg> = FixStringName<
     ? N
     : never
 >;
-export type FixType<T extends string> = FixStringName<T> extends InputType ? FixStringName<T> : "string"
+export type FixType<T extends string> = FixStringName<T> extends InputType ? FixStringName<T> : "unknown"
 export type FindType<A extends FullArg> = FixStringName<
     A extends `[${string}:${infer T}=${string}]`
     ? FixType<T>
     : A extends `[${string}:${infer T}]`
     ? FixType<T>
-    : "string"
+    : "unknown"
 >;
 export type FindValue<A extends FullArg> =
     A extends `[${string}:${string}=${infer V}]`
@@ -33,7 +33,7 @@ export type FindArgumentTexts<T extends string> =
     ? [`[${A}]`, ...FindArgumentTexts<T extends `${string}[${string}]${infer B}` ? B : "">]
     : [];
 export type ArgumentMap<T extends string, _L extends Record<string, any>> = DeepReadonly<{
-    [K in FindArgumentTexts<T>[number]as FindName<K>]: InputTypeCast[FindType<K>];
+    [K in FindArgumentTexts<T>[number]as FindName<K>]: InputTypeCastWithUnknown[FindType<K>];
 }>;
 export type DefaultMap<T extends string> = DeepReadonly<{
     [K in FindArgumentTexts<T>[number]as FindName<K>]: ParseValue<FindValue<K>>;

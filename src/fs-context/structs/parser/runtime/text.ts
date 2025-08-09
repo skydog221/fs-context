@@ -1,4 +1,4 @@
-import { casterMap, InputType } from "fs-context/structs/classify";
+import { casterMap, InputType, inputTypes } from "fs-context/structs/classify";
 import { unquote } from "fs-context/structs/util";
 import { regexMap } from "./base";
 import { BlockArgumentStored } from "fs-context/structs/stored";
@@ -29,6 +29,9 @@ export function parseArg(inputStr: string): TextPart {
         defaultValue: value,
     };
 }
+export function isInternalType(type: string): type is InputType {
+    return inputTypes.includes(type as InputType);
+}
 export function toParts(text: string): TextPart[] {
     const parts: TextPart[] = [];
     let lastIndex = 0;
@@ -58,7 +61,7 @@ export function toParts(text: string): TextPart[] {
 export function storeArg(part: TextPart): BlockArgumentStored | null {
     if (part.type === "arg") {
         const result: BlockArgumentStored = {
-            type: part.inputType,
+            type: isInternalType(part.inputType) ? part.inputType : "string",
         };
         if (part.defaultValue) {
             result.defaultValue = casterMap[part.inputType](part.defaultValue);

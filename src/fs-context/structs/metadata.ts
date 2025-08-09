@@ -1,6 +1,7 @@
 import { BlockType } from "./classify";
 import { ArgumentMap, DefaultMap } from "./parser/compiltime";
 import { TextPart } from "./parser/runtime/text";
+import { HexColorString } from "./util";
 
 export interface ExtensionMetadata<
     Blocks extends BlockMetadata[] = BlockMetadata[],
@@ -14,6 +15,7 @@ export interface ExtensionMetadata<
     menus: Menus;
     loaders: Loaders;
     allowSandbox: boolean;
+    color: [HexColorString | null, HexColorString | null, HexColorString | null];
 }
 export interface BlockMetadata<Text extends string = string, Value = any, Loaders extends Record<string, any> = any> {
     parts(): TextPart[];

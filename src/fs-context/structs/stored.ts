@@ -2,6 +2,7 @@ import { InputType } from "./classify";
 import { ExtensionBuilder } from "./builder";
 import { BlockType } from "./classify";
 import { ExtensionMetadata } from "./metadata";
+import { HexColorString } from "./util";
 
 export interface BlockStored {
     opcode: string;
@@ -27,6 +28,9 @@ export interface ExtensionInfoStored {
     name: string;
     blocks: BlockStored[];
     menus: Record<string, MenuStored>;
+    color1?: HexColorString;
+    color2?: HexColorString;
+    color3?: HexColorString;
 }
 export type ExtensionStored = {
     getInfo(): ExtensionInfoStored;

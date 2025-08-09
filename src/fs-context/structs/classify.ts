@@ -1,4 +1,3 @@
-import { colorParser } from "fs-context";
 import { HexColorString } from "./util";
 
 export const blockTypes = ["command", "reporter", "boolean"] as const;
@@ -13,6 +12,9 @@ export type InputTypeCast = {
     color: HexColorString;
     "hat-param": string;
 };
+export type InputTypeCastWithUnknown = InputTypeCast & {
+    unknown: unknown;
+};
 export type InputType = keyof InputTypeCast;
 export const casterMap: {
     [K in InputType]: (value: string) => InputTypeCast[K]
@@ -22,6 +24,7 @@ export const casterMap: {
     bool: Boolean,
     menu: String,
     angle: Number,
-    color: colorParser.fix,
+    color: (value: string) => String(value) as HexColorString,
     "hat-param": String,
 };
+export const inputTypes = Object.keys(casterMap) as InputType[];

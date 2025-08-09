@@ -1,7 +1,8 @@
 import { menuParser, pluginManager, textParser } from "fs-context";
 import { ExtensionBuilder } from "fs-context/structs/builder";
 import { ExtensionMetadata } from "fs-context/structs/metadata";
-import { ExtensionStored, ContextEnvironment } from "fs-context/structs/stored";
+import { isInternalType } from "fs-context/structs/parser/runtime/text";
+import { ExtensionStored, ContextEnvironment, ExtensionInfoStored } from "fs-context/structs/stored";
 
 export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) => void) {
     return class implements ExtensionStored {
@@ -12,11 +13,35 @@ export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) 
                 initer(...args);
             }
             md.blocks.forEach(block => {
-                this[block.opcode] = block.action;
+                this[block.opcode] = (args: Record<string, any>) => {
+                    const inputArgs = { ...args };
+                    block.parts().forEach(part => {
+                        if (part.type === "arg" && !isInternalType(part.inputType)) {
+                            if (part.inputType in md.loaders) {
+                                inputArgs[part.content] = md.loaders[part.inputType](inputArgs[part.content]);
+                            } else {
+                                console.error(`Argument "${part.content}" is using loader "${part.inputType}" but not found.`);
+                                if (part.defaultValue) {
+                                    inputArgs[part.content] = part.defaultValue;
+                                } else {
+                                    console.warn(`No default value of "${part.content}" is given.`);
+                                    inputArgs[part.content] = null;
+                                }
+                            }
+                        }
+                    });
+                    const defaults: Record<string, any> = {};
+                    block.parts().forEach(part => {
+                        if (part.type === "arg") {
+                            defaults[part.content] = part.defaultValue;
+                        }
+                    });
+                    return block.action(inputArgs, defaults);
+                };
             });
         }
         getInfo() {
-            return {
+            const result: ExtensionInfoStored = {
                 id: md.id,
                 name: `${md.name}${fsContext.developing ? "(Debug)" : ""}`,
                 blocks: md.blocks.map(blockMd => ({
@@ -35,7 +60,11 @@ export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) 
                         acceptReporters: menuMd.reportable
                     }
                 ]))
-            }
+            };
+            if (md.color[0]) result.color1 = md.color[0];
+            if (md.color[1]) result.color2 = md.color[1];
+            if (md.color[2]) result.color3 = md.color[2];
+            return result;
         }
     };
 }

@@ -1,6 +1,7 @@
 import { Builder } from "./interface";
 import { BlockMetadata, MenuMetadata, ExtensionMetadata, MenuItem, LoaderMetadata } from "./metadata";
 import { ArgumentMap, DefaultMap } from "./parser/compiltime";
+import { HexColorString } from "./util";
 
 export interface ExtensionBuilder<
     B extends BlockMetadata[] = any,
@@ -10,6 +11,7 @@ export interface ExtensionBuilder<
     block<N extends BlockMetadata>(md: N): ExtensionBuilder<[...B, N], M, L>;
     menu<N extends MenuMetadata>(md: N): ExtensionBuilder<B, [...M, N], L>;
     loader<N extends string, O>(name: N, md: LoaderMetadata<O>): ExtensionBuilder<B, M, L & { [K in N]: O }>;
+    theme(color: HexColorString, offset: number): ExtensionBuilder<B, M, L>;
 }
 export interface BlockBuilder<
     Text extends string = string,

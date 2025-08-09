@@ -1,9 +1,10 @@
-import { textParser } from "fs-context";
+import { colorParser, textParser } from "fs-context";
 import { ExtensionBuilder, BlockBuilder, MenuBuilder } from "./builder";
 import { blockTypes, BlockType } from "./classify";
 import { BlockTypeSelector } from "./interface";
 import { BlockMetadata, MenuMetadata, MenuItem, LoaderMetadata } from "./metadata";
 import { ArgumentMap, DefaultMap } from "./parser/compiltime";
+import { HexColorString } from "./util";
 
 export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata[] = [], L extends Record<string, LoaderMetadata> = Record<string, LoaderMetadata>>(id: string): ExtensionBuilder<B, M, L> {
     let name = "Example extension";
@@ -12,6 +13,9 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
     const blocks: B = [] as unknown as B;
     const menus: M = [] as unknown as M;
     const loaders: L = {} as unknown as L;
+    let color1: HexColorString | null = null;
+    let color2: HexColorString | null = null;
+    let color3: HexColorString | null = null;
     return {
         id(v) {
             id = v;
@@ -53,6 +57,18 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
             allowSandbox = v;
             return this;
         },
+        theme(color, offset = 0.15) {
+            color1 = color;
+            color2 = colorParser.darken(color, offset);
+            color3 = colorParser.darken(color, offset * 2);
+            return this;
+        },
+        color(v) {
+            color1 = v[0];
+            color2 = v[1];
+            color3 = v[2];
+            return this;
+        },
         build() {
             return {
                 id,
@@ -61,7 +77,8 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
                 blocks,
                 menus,
                 loaders,
-                allowSandbox
+                allowSandbox,
+                color: [color1, color2, color3]
             };
         }
     }
