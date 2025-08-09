@@ -15,10 +15,10 @@ export type FindName<A extends FullArg> = FixStringName<
 >;
 export type FindType<A extends FullArg> = FixStringName<
     A extends `[${string}:${infer T}=${string}]`
-    ? FixStringName<T> extends InputType ? T : '"string"'
+    ? FixStringName<T> extends InputType ? T : "string"
     : A extends `[${string}:${infer T}]`
-    ? FixStringName<T> extends InputType ? T : '"string"'
-    : '"string"'
+    ? FixStringName<T> extends InputType ? T : "string"
+    : "string"
 >;
 export type FindValue<A extends FullArg> = FixStringName<
     A extends `[${string}:${string}=${infer V}]`
