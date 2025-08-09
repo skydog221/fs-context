@@ -44,7 +44,7 @@ export type DefaultMap<T extends string> = DeepReadonly<{
 export type ParseValue<T extends string> =
     T extends `${infer N extends number}` ? N :
     T extends `"${infer S extends string}"` ? S :
-    T extends `#${infer _C extends string}` ? ColorRGB :
+    T extends HexColorString ? T :
     T extends "true" ? true :
     T extends "false" ? false :
     unknown;
