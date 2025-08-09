@@ -19,7 +19,7 @@ export type FindType<A extends FullArg> = FixStringName<
     ? FixType<T>
     : A extends `[${string}:${infer T}]`
     ? FixType<T>
-    : "unknown"
+    : "string"
 >;
 export type FindValue<A extends FullArg> =
     A extends `[${string}:${string}=${infer V}]`
