@@ -37,17 +37,17 @@ export default defineModLoader({
                         };
                     });
                     api.addBlock({
-                        opcode: `${extension.id}.${block.opcode}`,
+                        opcode: `fsc.${extension.id}.${block.opcode}`,
                         type: blockType.get(block.type)!,
-                        messageId: `${extension.id}.${block.opcode}.message`,
-                        categoryId: `${extension.id}.category`,
+                        messageId: `fsc.${extension.id}.${block.opcode}.message`,
+                        categoryId: `fsc.${extension.id}.category`,
                         param,
                         function: extensionStored[block.opcode] as (args: Record<string, any>) => any
                     });
                 });
             }
             onUninit() {
-                api.removeCategory(`${extension.id}.category`);
+                api.removeCategory(`fsc.${extension.id}.category`);
             }
         };
     },
