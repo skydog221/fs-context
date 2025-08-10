@@ -9,7 +9,9 @@
         "build:native": "tsc"
     },
     "extension": {
-        "name": "example-extension",
+        "id": "example-extension",
+        "name": "Example Extension",
+        "description": "This is a example extension",
         "version": "1.0.0",
         "platform": [
             "tw",

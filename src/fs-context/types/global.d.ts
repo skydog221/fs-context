@@ -6,7 +6,9 @@ declare global {
         platform: string;
         developing: boolean;
         extension: {
+            id: string;
             name: string;
+            description: string;
             version: string;
             platform: string[];
             author: string;

@@ -6,9 +6,12 @@ import { BlockMetadata, MenuMetadata, MenuItem, LoaderMetadata } from "./metadat
 import { ArgumentMap, DefaultMap } from "./parser/compiltime";
 import { HexColorString } from "./util";
 
-export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata[] = [], L extends Record<string, LoaderMetadata> = Record<string, LoaderMetadata>>(id: string): ExtensionBuilder<B, M, L> {
-    let name = "Example extension";
-    let description = "This is a example extension";
+export function extension<
+    B extends BlockMetadata[] = [],
+    M extends MenuMetadata[] = [],
+    L extends Record<string, LoaderMetadata> = Record<string, LoaderMetadata>
+>(): ExtensionBuilder<B, M, L> {
+    let { name, description } = fsContext.extension;
     let allowSandbox = true;
     const blocks: B = [] as unknown as B;
     const menus: M = [] as unknown as M;
@@ -17,8 +20,7 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
     let color2: HexColorString | null = null;
     let color3: HexColorString | null = null;
     return {
-        id(v) {
-            id = v;
+        id() {
             return this;
         },
         name(v) {
@@ -79,7 +81,7 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
         },
         build() {
             return {
-                id,
+                id: fsContext.extension.id,
                 name,
                 description,
                 blocks,

@@ -1,7 +1,7 @@
 import extension from "./config";
 import { extensionManager, pluginManager } from "fs-context";
 
-console.log(`Loading "${fsContext.extension.name} v${fsContext.extension.version}" on ${fsContext.platform}.`);
+console.log(`Loading "${fsContext.extension.id} v${fsContext.extension.version}" on ${fsContext.platform}.`);
 const unsupportedPlatforms = fsContext.extension.platform.filter(pf => !pluginManager.getRegistered().includes(pf));
 if (unsupportedPlatforms.includes(fsContext.platform)) {
     throw new Error(`Platform ${fsContext.platform} is not supported.`);
