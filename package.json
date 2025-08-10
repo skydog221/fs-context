@@ -9,13 +9,13 @@
         "build:native": "tsc"
     },
     "extension": {
-        "id": "example-extension",
+        "id": "exampleextension",
         "name": "Example Extension",
         "description": "This is a example extension",
         "version": "1.0.0",
         "platform": [
             "tw",
-            "gandi"
+            "clipcc"
         ],
         "author": "陨落基围虾"
     },

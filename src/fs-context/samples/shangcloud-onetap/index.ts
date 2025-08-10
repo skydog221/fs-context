@@ -9,7 +9,7 @@ import getVar from "./blocks/getVar";
 import delVar from "./blocks/delVar";
 import isTokenValid from "./blocks/isTokenValid";
 
-export default extension("shangcloud")
+export default extension()
     .name("ShangCloud 云变量")
     .description("ShangCloud 云变量扩展")
     .label("鉴权相关")
