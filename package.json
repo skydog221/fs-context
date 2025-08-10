@@ -43,5 +43,8 @@
         "webpack-merge": "^6.0.1",
         "webpackbar": "^7.0.0",
         "zip-webpack-plugin": "^4.0.3"
+    },
+    "dependencies": {
+        "clipcc-extension": "^0.2.0"
     }
 }
