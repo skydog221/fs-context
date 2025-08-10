@@ -10,6 +10,7 @@
         "allowJs": true,
         "checkJs": true,
         "isolatedModules": true,
+        "resolveJsonModule": true,
         "types": [
             "webpack-env",
             "node"
@@ -19,6 +20,9 @@
         "paths": {
             "fs-context": [
                 "src/fs-context/index"
+            ],
+            "fs-context/native-plugin": [
+                "src/native/structs/plugin"
             ],
             "package.json": [
                 "package.json"
