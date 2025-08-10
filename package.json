@@ -3,9 +3,10 @@
     "version": "2.0.0",
     "scripts": {
         "check:type": "tsc --noEmit",
-        "lint": "eslint . --fix",
+        "check:lint": "eslint . --fix",
+        "dev": "cross-env NODE_ENV=development webpack serve --config-name",
         "build": "cross-env NODE_ENV=production webpack",
-        "dev": "cross-env NODE_ENV=development webpack serve --config-name"
+        "build:native": "tsc"
     },
     "extension": {
         "name": "example-extension",

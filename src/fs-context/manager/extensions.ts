@@ -1,7 +1,7 @@
 import { blockTypeParser, menuParser, pluginManager, textParser } from "fs-context";
 import { ExtensionBuilder } from "fs-context/structs/builder";
 import { BlockType } from "fs-context/structs/classify";
-import { BlockMetadata, ExtensionMetadata } from "fs-context/structs/metadata";
+import { ExtensionMetadata } from "fs-context/structs/metadata";
 import { isInternalType } from "fs-context/structs/parser/runtime/text";
 import { ExtensionStored, ContextEnvironment, ExtensionInfoStored, BlockStored } from "fs-context/structs/stored";
 

@@ -15,6 +15,7 @@
             "node"
         ],
         "baseUrl": ".",
+        "outDir": "dist/native",
         "paths": {
             "fs-context": [
                 "src/fs-context/index"
