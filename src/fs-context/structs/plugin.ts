@@ -12,7 +12,7 @@ export interface ModLoadable {
     obtainRuntime(this: ModLoadable, environment: ContextEnvironment, ...contextData: any[]): ScratchRuntime;
     load(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, ...contextData: any[]): void;
     unload?(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, ...contextData: any[]): void;
-    expose?(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, ...contextData: any[]): any;
+    expose?(this: ModLoadable, environment: ContextEnvironment): any;
 }
 export function defineModLoader(loader: ModLoadable) {
     return loader;

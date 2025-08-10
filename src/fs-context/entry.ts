@@ -25,3 +25,4 @@ pluginManager.call(fsContext.platform, "apply", [
         }
     })
 ], env => new env.extender.stored());
+export default pluginManager.call(fsContext.platform, "expose", [env]) ?? null;
