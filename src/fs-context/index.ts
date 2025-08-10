@@ -1,10 +1,11 @@
 import * as pluginManager from "./manager/plugins";
 import * as extensionManager from "./manager/extensions";
 
-import tw from "@plugin/tw";
-import gandi from "@plugin/gandi";
-pluginManager.register(tw);
-pluginManager.register(gandi);
+const plugins = require.context("@plugin", true, /index\.ts$/);
+plugins.keys().forEach(key => {
+    const plugin = plugins(key);
+    pluginManager.register(plugin.default);
+});
 
 export * from "./structs";
 export * as textParser from "./structs/parser/runtime/text";
