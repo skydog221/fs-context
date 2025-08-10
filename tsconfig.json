@@ -30,10 +30,14 @@
             ],
             "@sample/*": [
                 "src/fs-context/samples/*"
+            ],
+            "@plugin/*": [
+                "plugins/*"
             ]
         }
     },
     "include": [
-        "src/**/*.ts"
+        "src/**/*.ts",
+        "plugins/**/*.ts"
     ]
 }

@@ -1,8 +1,8 @@
 import * as pluginManager from "./manager/plugins";
 import * as extensionManager from "./manager/extensions";
 
-import tw from "./plugins/turbowarp";
-import gandi from "./plugins/gandi";
+import tw from "@plugin/turbowarp";
+import gandi from "@plugin/gandi";
 pluginManager.register(tw);
 pluginManager.register(gandi);
 
