@@ -10,7 +10,7 @@ const { merge } = require("webpack-merge");
 console.log(`Mode: ${process.env.NODE_ENV}`);
 module.exports = () => {
     const { webpack: webpackConfig } = require("./dist/native/src/native/plugins").load();
-    return packageJson.extension.platform.map(platform => {
+    return packageJson.extension.platform.map((platform, index) => {
         const filename = `[${platform}]${packageJson.extension.name}@${packageJson.extension.version}.js`;
         return merge({
             name: platform,
@@ -24,7 +24,8 @@ module.exports = () => {
             },
             output: {
                 path: path.resolve(__dirname, "dist"),
-                filename
+                filename,
+                clean: index !== 0
             },
             module: {
                 rules: [

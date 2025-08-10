@@ -26,17 +26,17 @@ export default definePlugin({
                 new CopyWebpackPlugin({
                     patterns: [{
                         from: path.resolve("src/extension/l10n"),
-                        to: path.resolve("dist/locales")
+                        to: path.resolve("dist/cc/locales")
                     }, {
                         from: path.resolve("src/extension/assets"),
-                        to: path.resolve("dist/assets")
+                        to: path.resolve("dist/cc/assets")
                     }, {
                         from: path.resolve("src/extension/info.json"),
-                        to: path.resolve("dist/info.json")
+                        to: path.resolve("dist/cc/info.json")
                     }]
                 }),
                 new ZipWebpackPlugin({
-                    path: path.resolve("dist"),
+                    path: path.resolve("dist/cc"),
                     filename: `${packageJson.extension.id}@${packageJson.extension.version}`,
                     extension: "ccx"
                 })

@@ -3,6 +3,7 @@ import { Linter } from "eslint";
 
 export interface NativePlugin {
     platform: string;
+    output?: false;
     configureWebpack?: (this: NativePlugin) => Configuration;
     configureESLint?: (this: NativePlugin) => Linter.Config[];
 }
