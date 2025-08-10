@@ -1,6 +1,6 @@
 import { HexColorString } from "./util";
 
-export const blockTypes = ["command", "reporter", "boolean"] as const;
+export const blockTypes = ["command", "reporter", "boolean", "label", "separator"] as const;
 export type BlockType = typeof blockTypes[number];
 export type BlockTypeStored = Exclude<BlockType, "boolean"> | "Boolean";
 

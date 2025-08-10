@@ -8,6 +8,8 @@ export interface ExtensionBuilder<
     M extends MenuMetadata[] = any,
     L extends Record<string, any> = any
 > extends Builder<ExtensionMetadata<B, M, L>, ExtensionBuilder<B, M, L>> {
+    separator(): ExtensionBuilder<B, M, L>;
+    label(text: string): ExtensionBuilder<B, M, L>;
     block<N extends BlockMetadata>(md: N): ExtensionBuilder<[...B, N], M, L>;
     menu<N extends MenuMetadata>(md: N): ExtensionBuilder<B, [...M, N], L>;
     loader<N extends string, O>(name: N, md: LoaderMetadata<O>): ExtensionBuilder<B, M, L & { [K in N]: O }>;

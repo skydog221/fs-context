@@ -4,10 +4,10 @@ import { ExtensionMetadata } from "./metadata";
 import { HexColorString } from "./util";
 
 export interface BlockStored {
-    opcode: string;
+    opcode?: string;
     blockType: BlockTypeStored;
     text: string;
-    arguments: Record<string, BlockArgumentStored>;
+    arguments?: Record<string, BlockArgumentStored>;
 }
 export interface BlockArgumentStored {
     type: InputTypeStored;
@@ -25,7 +25,7 @@ export interface MenuStored {
 export interface ExtensionInfoStored {
     id: string;
     name: string;
-    blocks: BlockStored[];
+    blocks: (BlockStored | "---")[];
     menus: Record<string, MenuStored>;
     color1?: HexColorString;
     color2?: HexColorString;

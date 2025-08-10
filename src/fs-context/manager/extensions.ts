@@ -1,8 +1,9 @@
 import { blockTypeParser, menuParser, pluginManager, textParser } from "fs-context";
 import { ExtensionBuilder } from "fs-context/structs/builder";
-import { ExtensionMetadata } from "fs-context/structs/metadata";
+import { BlockType } from "fs-context/structs/classify";
+import { BlockMetadata, ExtensionMetadata } from "fs-context/structs/metadata";
 import { isInternalType } from "fs-context/structs/parser/runtime/text";
-import { ExtensionStored, ContextEnvironment, ExtensionInfoStored } from "fs-context/structs/stored";
+import { ExtensionStored, ContextEnvironment, ExtensionInfoStored, BlockStored } from "fs-context/structs/stored";
 
 export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) => void) {
     return class implements ExtensionStored {
@@ -44,15 +45,26 @@ export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) 
             const result: ExtensionInfoStored = {
                 id: md.id,
                 name: `${md.name}${fsContext.developing ? "(Debug)" : ""}`,
-                blocks: md.blocks.map(blockMd => ({
-                    opcode: blockMd.opcode,
-                    blockType: blockTypeParser.store(blockMd.type),
-                    text: textParser.storeText(blockMd.text),
-                    arguments: Object.fromEntries(blockMd.parts().map(part => [
-                        part.content,
-                        textParser.storeArg(part)
-                    ]).filter(part => Boolean(part[1])))
-                })),
+                blocks: md.blocks.map(blockMd => {
+                    const result: BlockStored = {
+                        opcode: blockMd.opcode,
+                        blockType: blockTypeParser.store(blockMd.type as BlockType),
+                        text: textParser.storeText(blockMd.text),
+                        arguments: Object.fromEntries(blockMd.parts().map(part => [
+                            part.content,
+                            textParser.storeArg(part)
+                        ]).filter(part => Boolean(part[1])))
+                    };
+                    if (blockMd.type === "label" || blockMd.type === "separator") {
+                        delete result.opcode;
+                        if (blockMd.type === "label") {
+                            delete result.arguments;
+                        } else if (blockMd.type === "separator") {
+                            return "---";
+                        }
+                    }
+                    return result;
+                }),
                 menus: Object.fromEntries(md.menus.map(menuMd => [
                     menuMd.name,
                     {

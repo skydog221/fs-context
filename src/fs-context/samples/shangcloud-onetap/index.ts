@@ -11,12 +11,17 @@ import isTokenValid from "./blocks/isTokenValid";
 
 export default extension("shangcloud")
     .name("ShangCloud 云变量")
+    .description("ShangCloud 云变量扩展")
+    .label("鉴权相关")
+    .separator()
+    .block(setClientID)
     .block(loginStatus)
+    .block(isTokenValid)
+    .block(tryLogin)
+    .label("用户信息")
     .block(userUid)
     .block(userNickname)
+    .label("变量增删改查")
     .block(writeVar)
-    .block(setClientID)
-    .block(tryLogin)
     .block(getVar)
-    .block(delVar)
-    .block(isTokenValid);
+    .block(delVar);

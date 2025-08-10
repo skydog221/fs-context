@@ -69,6 +69,14 @@ export function extension<B extends BlockMetadata[] = [], M extends MenuMetadata
             color3 = v[2];
             return this;
         },
+        separator() {
+            blocks.push(blockType.separator("").build());
+            return this;
+        },
+        label(text) {
+            blocks.push(blockType.label("").text(text).build());
+            return this;
+        },
         build() {
             return {
                 id,
