@@ -6,7 +6,7 @@
         "check:lint": "eslint . --fix",
         "dev": "cross-env NODE_ENV=development webpack serve --config-name",
         "build": "cross-env NODE_ENV=production webpack",
-        "build:native": "tsc"
+        "build:native": "tsc --watch"
     },
     "extension": {
         "name": "example-extension",
@@ -30,6 +30,7 @@
         "css-loader": "^7.1.2",
         "eslint": "^9.16.0",
         "html-webpack-plugin": "^5.6.3",
+        "jiti": "^2.5.1",
         "raw-loader": "^4.0.2",
         "style-loader": "^4.0.0",
         "ts-loader": "^9.5.1",

@@ -1,8 +1,8 @@
-import { definePlugin } from "fs-context/native-plugin";
+import { definePlugin } from "../../src/native/structs/plugin";
 import path from "path";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import ZipWebpackPlugin from "zip-webpack-plugin";
-import packageJson from "package.json";
+import packageJson from "../../package.json";
 
 export default definePlugin({
     configureWebpack() {
@@ -41,5 +41,5 @@ export default definePlugin({
                 })
             ]
         };
-    },
+    }
 });

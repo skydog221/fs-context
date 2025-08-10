@@ -1,9 +1,9 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
-import { defineConfig } from "eslint/config";
+import { load } from "./src/native/plugins";
 
-export default defineConfig([
+export default [
     { files: ["**/*.{js,mjs,cjs,ts}"] },
     { languageOptions: { globals: globals.browser } },
     pluginJs.configs.recommended,
@@ -35,5 +35,6 @@ export default defineConfig([
             "**/node_modules/**",
             "**/v1.ts"
         ]
-    }
-]);
+    },
+    ...(await load()).eslint
+];
