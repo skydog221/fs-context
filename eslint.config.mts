@@ -20,14 +20,12 @@ export default [
                     argsIgnorePattern: "^_",
                 },
             ],
+            "@typescript-eslint/no-require-imports": "off"
         },
     },
     {
         files: ["webpack.config.js"],
-        languageOptions: { globals: globals.node },
-        rules: {
-            "@typescript-eslint/no-require-imports": "off"
-        }
+        languageOptions: { globals: globals.node }
     },
     {
         ignores: [
@@ -36,5 +34,5 @@ export default [
             "**/v1.ts"
         ]
     },
-    ...(await load()).eslint
+    ...load().eslint
 ];

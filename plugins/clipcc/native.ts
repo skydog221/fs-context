@@ -5,6 +5,7 @@ import ZipWebpackPlugin from "zip-webpack-plugin";
 import packageJson from "../../package.json";
 
 export default definePlugin({
+    platform: "clipcc",
     configureWebpack() {
         return {
             output: {

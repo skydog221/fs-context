@@ -3,10 +3,9 @@ import fs from "fs";
 import { NativePlugin } from "fs-context/native-plugin";
 import path from "path";
 import { Configuration } from "webpack";
-import { merge } from "webpack-merge";
 
-export async function load() {
-    let webpack: Configuration = {};
+export function load() {
+    const webpack: Record<string, Configuration> = {};
     const eslint: Linter.Config[] = [];
     const pluginsDir = path.join(__dirname, "../../plugins");
     try {
@@ -16,11 +15,12 @@ export async function load() {
             try {
                 const nativePath = path.resolve("dist/native/plugins", folder, "native.js");
                 if (fs.existsSync(nativePath)) {
-                    const { default: { default: plugin } }: { default: { default: NativePlugin } } = await import(nativePath);
-                    webpack = merge(webpack, plugin.configureWebpack?.call(plugin) ?? {});
+                    const { default: plugin }: { default: NativePlugin } = require(nativePath);
+                    webpack[plugin.platform] = plugin.configureWebpack?.call(plugin) ?? {};
                     eslint.push(...(plugin.configureESLint?.call(plugin) ?? []));
                     console.log(`Plugin ${folder} loaded successfully.`);
                 } else {
+                    webpack[folder] = {};
                     console.warn(`Found plugin ${folder} not found native.ts.`);
                 }
             } catch (err) {
