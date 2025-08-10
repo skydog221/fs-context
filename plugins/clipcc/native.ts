@@ -1,5 +1,6 @@
 import { definePlugin } from "../../src/native/structs/plugin";
 import path from "path";
+import fs from "fs";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import ZipWebpackPlugin from "zip-webpack-plugin";
 import packageJson from "../../package.json";
@@ -7,7 +8,7 @@ import packageJson from "../../package.json";
 export default definePlugin({
     platform: "clipcc",
     configureWebpack() {
-        return {
+        return ({ filename }) => ({
             output: {
                 module: true,
                 library: {
@@ -37,10 +38,22 @@ export default definePlugin({
                 }),
                 new ZipWebpackPlugin({
                     path: path.resolve("dist/cc"),
-                    filename: `${packageJson.extension.id}@${packageJson.extension.version}`,
+                    filename: `../${packageJson.extension.id}@${packageJson.extension.version}`,
                     extension: "ccx"
-                })
+                }),
+                {
+                    apply(compiler) {
+                        compiler.hooks.done.tap("CleanAfterBuildPlugin", () => {
+                            [path.join("dist", filename), path.join("dist", "cc")].forEach(file => {
+                                const fullPath = path.resolve(file);
+                                if (fs.existsSync(fullPath)) {
+                                    fs.unlinkSync(fullPath);
+                                }
+                            });
+                        });
+                    }
+                }
             ]
-        };
+        });
     }
 });

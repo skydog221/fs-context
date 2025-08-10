@@ -12,7 +12,7 @@ module.exports = () => {
     const { webpack: webpackConfig } = require("./dist/native/src/native/plugins").load();
     return packageJson.extension.platform.map((platform, index) => {
         const filename = `[${platform}]${packageJson.extension.name}@${packageJson.extension.version}.js`;
-        return merge({
+        const base = {
             name: platform,
             entry: "fs-context/entry.ts",
             resolve: {
@@ -70,6 +70,7 @@ module.exports = () => {
             },
             mode: process.env.NODE_ENV,
             stats: "errors-warnings"
-        }, webpackConfig[platform] ?? {});
+        };
+        return merge(base, webpackConfig[platform]({ filename, base }) ?? {});
     })
 };

@@ -1,11 +1,11 @@
 import { Linter } from "eslint";
 import fs from "fs";
-import { NativePlugin } from "fs-context/native-plugin";
+import { ExtendWebpackConfig, NativePlugin } from "fs-context/native-plugin";
 import path from "path";
 import { Configuration } from "webpack";
 
 export function load() {
-    const webpack: Record<string, Configuration> = {};
+    const webpack: Record<string, (config: ExtendWebpackConfig) => Configuration> = {};
     const eslint: Linter.Config[] = [];
     const pluginsDir = path.join(__dirname, "../../plugins");
     try {
@@ -16,15 +16,15 @@ export function load() {
                 const nativePath = path.resolve("dist/native/plugins", folder, "native.js");
                 if (fs.existsSync(nativePath)) {
                     const { default: plugin }: { default: NativePlugin } = require(nativePath);
-                    webpack[plugin.platform] = plugin.configureWebpack?.call(plugin) ?? {};
+                    webpack[plugin.platform] = plugin.configureWebpack?.call(plugin) ?? (() => ({}));
                     eslint.push(...(plugin.configureESLint?.call(plugin) ?? []));
-                    console.log(`Plugin ${folder} loaded successfully.`);
+                    console.log(`Plugin "${folder}" loaded successfully.`);
                 } else {
-                    webpack[folder] = {};
-                    console.warn(`Found plugin ${folder} not found native.ts.`);
+                    webpack[folder] = () => ({});
+                    console.warn(`Found empty native plugin "${folder}".`);
                 }
             } catch (err) {
-                console.error(`Failed to load plugin from ${folder}:`, err);
+                console.error(`Failed to load plugin from "${folder}":`, err);
             }
         }
     } catch (err) {
