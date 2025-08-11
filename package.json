@@ -18,7 +18,9 @@
         "platform": [
             "gandi",
             "tw",
-            "clipcc"
+            "clipcc",
+            "40code",
+            "zerocat"
         ],
         "author": "陨落基围虾"
     },
