@@ -10,8 +10,8 @@ const { merge } = require("webpack-merge");
 console.log(`Mode: ${process.env.NODE_ENV}`);
 module.exports = () => {
     const { webpack: webpackConfig } = require("./dist/native/src/native/plugins").load();
-    return packageJson.extension.platform.map((platform, index) => {
-        const filename = `[${platform}]${packageJson.extension.name}@${packageJson.extension.version}.js`;
+    return packageJson.extension.platform.map((platform) => {
+        const filename = `[${platform}]${packageJson.extension.id}@${packageJson.extension.version}.js`;
         const base = {
             name: platform,
             entry: "fs-context/entry.ts",
@@ -24,8 +24,7 @@ module.exports = () => {
             },
             output: {
                 path: path.resolve(__dirname, "dist"),
-                filename,
-                clean: index !== 0
+                filename
             },
             module: {
                 rules: [
@@ -71,6 +70,10 @@ module.exports = () => {
             mode: process.env.NODE_ENV,
             stats: "errors-warnings"
         };
-        return merge(base, webpackConfig[platform]({ filename, base }) ?? {});
+        return merge(base, webpackConfig[platform]({ filename, base }) ?? {}, {
+            plugins: [
+                //pass
+            ]
+        });
     })
 };
