@@ -16,7 +16,8 @@
         "description": "This is a example extension",
         "version": "1.0.0",
         "platform": [
-            "tw"
+            "tw",
+            "empty"
         ],
         "author": "陨落基围虾"
     },

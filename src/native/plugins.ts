@@ -18,17 +18,17 @@ export function load() {
                     const { default: plugin }: { default: NativePlugin } = require(nativePath);
                     webpack[plugin.platform] = plugin.configureWebpack?.call(plugin) ?? (() => ({}));
                     eslint.push(...(plugin.configureESLint?.call(plugin) ?? []));
-                    console.log(`Plugin "${folder}" loaded successfully.`);
+                    console.log(`${folder}: loaded successfully.`);
                 } else {
                     webpack[folder] = () => ({});
-                    console.warn(`Found empty native plugin "${folder}".`);
+                    console.warn(`${folder}: not found native module.`);
                 }
             } catch (err) {
-                console.error(`Failed to load plugin from "${folder}":`, err);
+                console.error(`${folder}: ${err}`);
             }
         }
     } catch (err) {
-        console.warn('Failed to read plugin folder:', err);
+        console.warn(`${pluginsDir}: ${err}`);
     }
     return { webpack, eslint };
 }
