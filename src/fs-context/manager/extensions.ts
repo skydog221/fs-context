@@ -2,7 +2,7 @@ import { blockTypeParser, menuParser, pluginManager, textParser } from "fs-conte
 import { ExtensionBuilder } from "fs-context/structs/builder";
 import { BlockType } from "fs-context/structs/classify";
 import { ExtensionMetadata } from "fs-context/structs/metadata";
-import { isInternalType } from "fs-context/structs/parser/runtime/text";
+import { isStoredType } from "fs-context/structs/parser/runtime/text";
 import { ExtensionStored, ContextEnvironment, ExtensionInfoStored, BlockStored } from "fs-context/structs/stored";
 
 export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) => void) {
@@ -17,11 +17,11 @@ export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) 
                 this[block.opcode] = (args: Record<string, any>) => {
                     const inputArgs = { ...args };
                     block.parts().forEach(part => {
-                        if (part.type === "arg" && !isInternalType(part.inputType)) {
+                        if (part.type === "arg" && !isStoredType(part.inputType)) {
                             if (part.inputType in md.loaders) {
                                 inputArgs[part.content] = md.loaders[part.inputType](inputArgs[part.content]);
                             } else {
-                                console.error(`Argument "${part.content}" is using loader "${part.inputType}" but not found.`);
+                                console.error(`Argument "${part.content}" is not a stored type and no loader named "${part.inputType}" is found.`);
                                 if (part.defaultValue) {
                                     inputArgs[part.content] = part.defaultValue;
                                 } else {

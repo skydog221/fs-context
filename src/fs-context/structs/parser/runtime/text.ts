@@ -30,7 +30,7 @@ export function parseArg(inputStr: string): TextPart {
         defaultValue: value,
     };
 }
-export function isInternalType(type: string): type is InputType {
+export function isStoredType(type: string): type is InputType {
     return inputTypes.includes(type as InputType);
 }
 export function toParts(text: string): TextPart[] {
@@ -64,7 +64,7 @@ export function storeArg(part: TextPart): BlockArgumentStored | null {
         const result: BlockArgumentStored = {
             type: "string",
         };
-        if (isInternalType(part.inputType) && part.inputType !== "menu") {
+        if (isStoredType(part.inputType) && part.inputType !== "menu") {
             result.type = argumentTypeParser.store(part.inputType);
         }
         if (part.inputType === "menu") {
