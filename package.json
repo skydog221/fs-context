@@ -55,6 +55,8 @@
         "zip-webpack-plugin": "^4.0.3"
     },
     "dependencies": {
+        "chalk": "4",
+        "chalk-template": "^1.1.0",
         "clipcc-extension": "^0.2.0"
     }
 }
