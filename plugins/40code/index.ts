@@ -1,3 +1,3 @@
+import { defineModLoader } from "fs-context/structs/plugin";
 import tw from "../tw";
-import { definePlugin } from "fs-context/native-plugin";
-export default definePlugin({ ...tw, platform: "40code" });
+export default defineModLoader({ ...tw, id: "40code" });
