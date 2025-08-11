@@ -2,13 +2,15 @@
     "name": "fs-context",
     "version": "2.0.0",
     "scripts": {
+        "gen": "tsc",
         "check:type": "tsc --noEmit",
+        "precheck:lint": "run-s gen",
         "check:lint": "eslint . --fix",
+        "predev": "run-s gen",
         "dev": "cross-env NODE_ENV=development webpack serve --config-name",
-        "build": "run-s build:*",
-        "build:native": "tsc",
-        "build:extension": "cross-env NODE_ENV=production webpack",
-        "postinstall": "run-s build:native"
+        "prebuild": "run-s gen",
+        "build": "cross-env NODE_ENV=production webpack",
+        "postinstall": "run-s gen"
     },
     "extension": {
         "id": "exampleextension",

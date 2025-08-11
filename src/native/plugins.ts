@@ -3,9 +3,10 @@ import fs from 'fs';
 import { ExtendWebpackConfig, NativePlugin } from './structs/plugin';
 import path from 'path';
 import { Configuration } from 'webpack';
-import chalkTemplate from "chalk-template";
+import chalkTemplate from 'chalk-template';
 
 export function load() {
+    console.log(`Mode: ${process.env.NODE_ENV === 'production' ? 'production' : 'development'}`);
     const webpack: Record<string, (config: ExtendWebpackConfig) => Configuration> = {};
     const eslint: Linter.Config[] = [];
     const pluginsDir = path.join(__dirname, '../../plugins');

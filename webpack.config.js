@@ -7,7 +7,6 @@ const tsconfigJson = require('./tsconfig.json');
 const packageJson = require('./package.json');
 const { merge } = require('webpack-merge');
 
-console.log(`Mode: ${process.env.NODE_ENV}`);
 module.exports = () => {
     const { webpack: webpackConfig } = require('./dist/native/src/native/plugins').load();
     return packageJson.extension.platform.map((platform) => {
