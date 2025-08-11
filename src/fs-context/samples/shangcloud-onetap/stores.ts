@@ -1,12 +1,12 @@
-import { remoteStore } from "fs-context/structs";
+import { remoteStore } from 'fs-context/structs';
 
 export const user = remoteStore({
-    uid: "",
-    nickname: "",
-    accessToken: "",
+    uid: '',
+    nickname: '',
+    accessToken: '',
 });
 export const client = remoteStore({
-    id: "",
-    accessToken: "",
-    refreshToken: ""
+    id: '',
+    accessToken: '',
+    refreshToken: ''
 });

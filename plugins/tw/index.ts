@@ -1,7 +1,7 @@
-import { defineModLoader } from "fs-context/structs/plugin";
+import { defineModLoader } from 'fs-context/structs/plugin';
 
 export default defineModLoader({
-    id: "tw",
+    id: 'tw',
     obtainRuntime(environment) {
         return environment.window.Scratch;
     },

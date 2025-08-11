@@ -1,8 +1,8 @@
-import { HexColorString } from "./util";
+import { HexColorString } from './util';
 
-export const blockTypes = ["command", "reporter", "boolean", "label", "separator"] as const;
+export const blockTypes = ['command', 'reporter', 'boolean', 'label', 'separator'] as const;
 export type BlockType = typeof blockTypes[number];
-export type BlockTypeStored = Exclude<BlockType, "boolean"> | "Boolean";
+export type BlockTypeStored = Exclude<BlockType, 'boolean'> | 'Boolean';
 
 export type InputTypeCast = {
     string: string;
@@ -11,13 +11,13 @@ export type InputTypeCast = {
     menu: string;
     angle: number;
     color: HexColorString;
-    "hat-param": string;
+    'hat-param': string;
 };
 export type InputTypeCastWithUnknown = InputTypeCast & {
     unknown: unknown;
 };
 export type InputType = keyof InputTypeCast;
-export type InputTypeStored = Exclude<InputType, "hat-param" | "bool"> | "Boolean" | "ccw_hat_parameter";
+export type InputTypeStored = Exclude<InputType, 'hat-param' | 'bool'> | 'Boolean' | 'ccw_hat_parameter';
 export const casterMap: {
     [K in InputType]: (value: string) => InputTypeCast[K]
 } = {
@@ -27,6 +27,6 @@ export const casterMap: {
     menu: String,
     angle: Number,
     color: (value: string) => String(value) as HexColorString,
-    "hat-param": String,
+    'hat-param': String,
 };
 export const inputTypes = Object.keys(casterMap) as InputType[];

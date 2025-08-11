@@ -1,10 +1,10 @@
-import { colorParser, textParser } from "fs-context";
-import { ExtensionBuilder, BlockBuilder, MenuBuilder } from "./builder";
-import { blockTypes, BlockType } from "./classify";
-import { BlockTypeSelector } from "./interface";
-import { BlockMetadata, MenuMetadata, MenuItem, LoaderMetadata } from "./metadata";
-import { ArgumentMap, DefaultMap } from "./parser/compiltime";
-import { HexColorString } from "./util";
+import { colorParser, textParser } from 'fs-context';
+import { ExtensionBuilder, BlockBuilder, MenuBuilder } from './builder';
+import { blockTypes, BlockType } from './classify';
+import { BlockTypeSelector } from './interface';
+import { BlockMetadata, MenuMetadata, MenuItem, LoaderMetadata } from './metadata';
+import { ArgumentMap, DefaultMap } from './parser/compiltime';
+import { HexColorString } from './util';
 
 export function extension<
     B extends BlockMetadata[] = [],
@@ -72,11 +72,11 @@ export function extension<
             return this;
         },
         separator() {
-            blocks.push(blockType.separator("").build());
+            blocks.push(blockType.separator('').build());
             return this;
         },
         label(text) {
-            blocks.push(blockType.label("").text(text).build());
+            blocks.push(blockType.label('').text(text).build());
             return this;
         },
         build() {
@@ -98,7 +98,7 @@ export const blockType = new Proxy({}, {
         if (blockTypes.includes(prop as BlockType)) {
             let blockType = prop as BlockType;
             return <L extends Record<string, any> = any, T extends string = string, V = any>(opcode: string): BlockBuilder<T, V, L> => {
-                let text = "" as unknown as T;
+                let text = '' as unknown as T;
                 let action = (_: any, __: any) => null as unknown as V;
                 return {
                     opcode(v) {

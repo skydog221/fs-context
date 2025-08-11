@@ -1,7 +1,7 @@
-import { Builder } from "./interface";
-import { BlockMetadata, MenuMetadata, ExtensionMetadata, MenuItem, LoaderMetadata } from "./metadata";
-import { ArgumentMap, DefaultMap } from "./parser/compiltime";
-import { HexColorString } from "./util";
+import { Builder } from './interface';
+import { BlockMetadata, MenuMetadata, ExtensionMetadata, MenuItem, LoaderMetadata } from './metadata';
+import { ArgumentMap, DefaultMap } from './parser/compiltime';
+import { HexColorString } from './util';
 
 export interface ExtensionBuilder<
     B extends BlockMetadata[] = any,

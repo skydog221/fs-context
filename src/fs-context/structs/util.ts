@@ -14,7 +14,7 @@ export type FixStringName<Text extends string> = Unquote<Trim<Text>>;
 export type ToNumber<S extends string> = S extends `${infer N extends number}` ? N : never;
 export type ToString<N extends number> = `${N}`;
 export function unquote(str: string) {
-    if (str.startsWith("\"") && str.endsWith("\"")) {
+    if (str.startsWith('"') && str.endsWith('"')) {
         return str.slice(1, -1);
     }
     return str;

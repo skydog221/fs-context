@@ -1,5 +1,5 @@
-import { DeepReadonly } from "fs-context/structs/util";
-import { ScratchRuntime } from "../structs/stored";
+import { DeepReadonly } from 'fs-context/structs/util';
+import { ScratchRuntime } from '../structs/stored';
 
 declare global {
     const fsContext: DeepReadonly<{

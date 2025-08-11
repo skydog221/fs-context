@@ -1,11 +1,20 @@
-import { blockType, extension } from "fs-context";
+import { blockType, extension } from 'fs-context';
 
 export default extension()
     .block(
-        blockType.reporter("guessDisease")
-            .text("猜病|日期：[DATE=0101]消息：[MESSAGE=Hello]chatId:[APPLE]")
-            .action(args => {
-                console.log(args.APPLE);
+        blockType.reporter('cookApplePie')
+            .text('制作一个苹果派，使用[apple:number=1]个苹果，当[sugar:bool=true]时放糖，[flour:number=200]g面粉，[egg:number=1]个鸡蛋，给[people="阳毅"]吃')
+            .action((args, _defaults) => {
+
+
+
+
+
+
+
+
+                args;
+                _defaults;
             })
             .build()
     )

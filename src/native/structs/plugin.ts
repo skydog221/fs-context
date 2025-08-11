@@ -1,5 +1,5 @@
-import { Configuration } from "webpack";
-import { Linter } from "eslint";
+import { Configuration } from 'webpack';
+import { Linter } from 'eslint';
 
 export interface ExtendWebpackConfig {
     filename: string;

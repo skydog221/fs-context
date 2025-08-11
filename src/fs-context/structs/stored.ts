@@ -1,7 +1,7 @@
-import { BlockTypeStored, InputTypeStored } from "./classify";
-import { ExtensionBuilder } from "./builder";
-import { ExtensionMetadata } from "./metadata";
-import { HexColorString } from "./util";
+import { BlockTypeStored, InputTypeStored } from './classify';
+import { ExtensionBuilder } from './builder';
+import { ExtensionMetadata } from './metadata';
+import { HexColorString } from './util';
 
 export interface BlockStored {
     opcode?: string;
@@ -25,7 +25,7 @@ export interface MenuStored {
 export interface ExtensionInfoStored {
     id: string;
     name: string;
-    blocks: (BlockStored | "---")[];
+    blocks: (BlockStored | '---')[];
     menus: Record<string, MenuStored>;
     color1?: HexColorString;
     color2?: HexColorString;

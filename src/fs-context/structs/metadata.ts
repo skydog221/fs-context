@@ -1,7 +1,7 @@
-import { BlockType } from "./classify";
-import { ArgumentMap, DefaultMap } from "./parser/compiltime";
-import { TextPart } from "./parser/runtime/text";
-import { HexColorString } from "./util";
+import { BlockType } from './classify';
+import { ArgumentMap, DefaultMap } from './parser/compiltime';
+import { TextPart } from './parser/runtime/text';
+import { HexColorString } from './util';
 
 export interface ExtensionMetadata<
     Blocks extends BlockMetadata[] = BlockMetadata[],

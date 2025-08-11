@@ -1,6 +1,6 @@
-import { MenuItem } from "fs-context/structs/metadata";
-import { regexMap } from "./base";
-import { MenuItemStored } from "fs-context/structs/stored";
+import { MenuItem } from 'fs-context/structs/metadata';
+import { regexMap } from './base';
+import { MenuItemStored } from 'fs-context/structs/stored';
 
 export function toMenuItem(inputString: string): MenuItem[] {
     const result: MenuItem[] = [];

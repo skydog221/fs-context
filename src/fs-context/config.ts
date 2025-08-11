@@ -1,1 +1,1 @@
-export { default } from "@sample/shangcloud-onetap";
+export { default } from '@sample/shangcloud-onetap';

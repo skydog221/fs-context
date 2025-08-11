@@ -16,11 +16,7 @@
         "description": "This is a example extension",
         "version": "1.0.0",
         "platform": [
-            "gandi",
-            "tw",
-            "clipcc",
-            "40code",
-            "zerocat"
+            "tw"
         ],
         "author": "陨落基围虾"
     },

@@ -1,5 +1,5 @@
-import { BlockBuilder } from "./builder";
-import { BlockType } from "./classify";
+import { BlockBuilder } from './builder';
+import { BlockType } from './classify';
 
 export interface Buildable<out T> {
     build(): T;

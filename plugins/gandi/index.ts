@@ -1,10 +1,10 @@
-import { defineModLoader } from "fs-context/structs/plugin";
+import { defineModLoader } from 'fs-context/structs/plugin';
 
 declare const window: Window & {
     tempExt: any;
 };
 export default defineModLoader({
-    id: "gandi",
+    id: 'gandi',
     obtainRuntime(_, ...args) {
         return args[0];
     },

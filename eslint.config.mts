@@ -1,37 +1,37 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
-import { load } from "./src/native/plugins";
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import { load } from './src/native/plugins';
 
 export default [
-    { files: ["**/*.{js,mjs,cjs,ts}"] },
+    { files: ['**/*.{js,mjs,cjs,ts}'] },
     { languageOptions: { globals: globals.browser } },
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
     {
         rules: {
-            "@typescript-eslint/no-explicit-any": "off",
-            "indent": ["error", 4],
-            "quotes": ["error", "double"],
-            "@typescript-eslint/no-unused-vars": [
-                "error",
+            '@typescript-eslint/no-explicit-any': 'off',
+            'indent': ['error', 4],
+            'quotes': ['error', 'double'],
+            '@typescript-eslint/no-unused-vars': [
+                'error',
                 {
-                    varsIgnorePattern: "^_",
-                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: '^_',
+                    argsIgnorePattern: '^_',
                 },
             ],
-            "@typescript-eslint/no-require-imports": "off"
+            '@typescript-eslint/no-require-imports': 'off'
         },
     },
     {
-        files: ["webpack.config.js"],
+        files: ['webpack.config.js'],
         languageOptions: { globals: globals.node }
     },
     {
         ignores: [
-            "**/dist/**",
-            "**/node_modules/**",
-            "**/v1.ts"
+            '**/dist/**',
+            '**/node_modules/**',
+            '**/v1.ts'
         ]
     },
     ...load().eslint

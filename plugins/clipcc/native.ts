@@ -1,39 +1,39 @@
-import { definePlugin } from "../../src/native/structs/plugin";
-import path from "path";
-import CopyWebpackPlugin from "copy-webpack-plugin";
-import yazl from "yazl";
-import webpack from "webpack";
-import fs from "fs-extra";
+import { definePlugin } from '../../src/native/structs/plugin';
+import path from 'path';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import yazl from 'yazl';
+import webpack from 'webpack';
+import fs from 'fs-extra';
 
 export default definePlugin({
-    platform: "clipcc",
+    platform: 'clipcc',
     configureWebpack() {
         return ({ filename }) => ({
             output: {
                 module: true,
                 library: {
-                    type: "commonjs2",
-                    export: "default"
+                    type: 'commonjs2',
+                    export: 'default'
                 }
             },
             experiments: {
                 outputModule: true
             },
             externals: {
-                "clipcc-extension": "ClipCCExtension"
+                'clipcc-extension': 'ClipCCExtension'
             },
-            externalsType: "global",
+            externalsType: 'global',
             plugins: [
                 new CopyWebpackPlugin({
                     patterns: [{
-                        from: path.resolve("src/extension/l10n"),
-                        to: path.resolve("dist/cc/locales")
+                        from: path.resolve('src/extension/l10n'),
+                        to: path.resolve('dist/cc/locales')
                     }, {
-                        from: path.resolve("src/extension/assets"),
-                        to: path.resolve("dist/cc/assets")
+                        from: path.resolve('src/extension/assets'),
+                        to: path.resolve('dist/cc/assets')
                     }, {
-                        from: path.resolve("src/extension/info.json"),
-                        to: path.resolve("dist/cc/info.json")
+                        from: path.resolve('src/extension/info.json'),
+                        to: path.resolve('dist/cc/info.json')
                     }]
                 }),
                 {
@@ -58,9 +58,9 @@ export default definePlugin({
                                 bufs.push(buf);
                             });
                             zipFile.outputStream.on('end', function () {
-                                const outputPath = path.resolve(compilation.options.output.path!, "cc");
+                                const outputPath = path.resolve(compilation.options.output.path!, 'cc');
                                 const outputFilename = `../${filename}`;
-                                const outputPathAndFilename = path.resolve(outputPath, outputFilename.slice(0, -3) + ".ccx");
+                                const outputPathAndFilename = path.resolve(outputPath, outputFilename.slice(0, -3) + '.ccx');
                                 const relativeOutputPath = path.relative(
                                     compilation.options.output.path!,
                                     outputPathAndFilename
@@ -72,10 +72,10 @@ export default definePlugin({
                                 fs.removeSync(outputPath);
                             });
                         };
-                        compiler.hooks.thisCompilation.tap("ZipPlugin", compilation => {
+                        compiler.hooks.thisCompilation.tap('ZipPlugin', compilation => {
                             compilation.hooks.processAssets.tapPromise(
                                 {
-                                    name: "ZipPlugin",
+                                    name: 'ZipPlugin',
                                     stage: webpack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_TRANSFER,
                                 },
                                 () => new Promise(resolve => process(compilation, resolve))
