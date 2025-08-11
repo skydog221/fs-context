@@ -6,6 +6,7 @@ plugins.keys().forEach(key => {
     const plugin = plugins(key);
     pluginManager.register(plugin.default);
 });
+console.log(plugins);
 
 export * from "./structs";
 export * as textParser from "./structs/parser/runtime/text";
