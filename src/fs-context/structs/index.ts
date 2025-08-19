@@ -2,7 +2,7 @@ import { colorParser, textParser } from 'fs-context';
 import { ExtensionBuilder, BlockBuilder, MenuBuilder } from './builder';
 import { blockTypes, BlockType } from './classify';
 import { BlockTypeSelector } from './interface';
-import { BlockMetadata, MenuMetadata, MenuItem, LoaderMetadata } from './metadata';
+import { BlockMetadata, MenuMetadata, MenuItem, LoaderMetadata, TranslatorMetadata } from './metadata';
 import { ArgumentMap, DefaultMap } from './parser/compiltime';
 import { HexColorString } from './util';
 
@@ -190,4 +190,19 @@ export function remoteStore<T extends object>(data: T): StoreSelf<T> {
             data[key] = value;
         }
     };
+}
+export function translator<L extends string>(language: L): TranslatorMetadata<L> {
+    const store: Record<string, string> = {};
+    return Object.assign((key: string) => {
+        return store[key] as any;
+    }, {
+        language,
+        write(key: string, value: string) {
+            store[key] = value;
+            return this as any;
+        },
+        get store() {
+            return store;
+        }
+    });
 }

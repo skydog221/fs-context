@@ -38,3 +38,9 @@ export interface MenuMetadata<Name extends string = any, Items extends MenuItem[
 export interface LoaderMetadata<Output = any> {
     (args: string): Output;
 }
+export interface TranslatorMetadata<Language extends string = string, Store extends Record<string, string> = {}> {
+    language: Language;
+    write<K extends string, V extends string>(key: K, value: V): TranslatorMetadata<Language, Store & Record<K, V>>;
+    <K extends keyof Store>(key: K): Store[K];
+    get store(): Store;
+}
