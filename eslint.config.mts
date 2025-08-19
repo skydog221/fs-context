@@ -30,8 +30,7 @@ export default [
     {
         ignores: [
             '**/dist/**',
-            '**/node_modules/**',
-            '**/v1.ts'
+            '**/node_modules/**'
         ]
     },
     ...load().eslint
