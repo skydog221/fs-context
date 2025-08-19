@@ -1,4 +1,4 @@
-import { translator } from "fs-context";
+import { translator } from 'fs-context';
 
-export const translate = translator("zh-CN")
-    .write("block.a", "");
+export const translate = translator('zh-CN')
+    .write('block.a', '');

@@ -7,6 +7,7 @@ import chalkTemplate from 'chalk-template';
 
 export function load() {
     console.log(`Mode: ${process.env.NODE_ENV === 'production' ? 'production' : 'development'}`);
+    const disablePlugins = JSON.parse(fs.readFileSync(path.join(__dirname, '../../plugins/disable.json'), 'utf-8')) as Record<'platform' | 'folder', string[]>;
     const webpack: Record<string, (config: ExtendWebpackConfig) => Configuration> = {};
     const eslint: Linter.Config[] = [];
     const pluginsDir = path.join(__dirname, '../../plugins');
@@ -21,10 +22,18 @@ export function load() {
     }
     for (const folder of pluginFolders) {
         const currentNativeId = folder;
+        if (disablePlugins.folder.includes(currentNativeId)) {
+            console.log(chalkTemplate`{gray ${pad(currentNativeId)}} | {red DISABLED}`);
+            continue;
+        }
         try {
             const nativePath = path.resolve('dist/native/plugins', folder, 'native.js');
             if (fs.existsSync(nativePath)) {
                 const { default: plugin }: { default: NativePlugin } = require(nativePath);
+                if (disablePlugins.platform.includes(plugin.platform)) {
+                    console.log(chalkTemplate`{gray ${pad(plugin.platform)}} | {red DISABLED}`);
+                    continue;
+                }
                 webpack[currentNativeId] = plugin.configureWebpack?.call(plugin) ?? (() => ({}));
                 eslint.push(...(plugin.configureESLint?.call(plugin) ?? []));
                 console.log(chalkTemplate`{gray ${pad(currentNativeId)}} | {green loaded successfully}: {cyan ${plugin.platform}}.`);
