@@ -41,6 +41,7 @@
     },
     "include": [
         "src/**/*.ts",
-        "plugins/**/*.ts"
+        "plugins/**/*.ts",
+        "plugins/disable.json"
     ]
 }
