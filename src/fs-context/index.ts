@@ -6,7 +6,6 @@ plugins.keys().forEach(key => {
     const plugin = plugins(key);
     pluginManager.register(plugin.default);
 });
-console.log(plugins);
 
 export * from './structs';
 export * as textParser from './structs/parser/runtime/text';
@@ -15,6 +14,7 @@ export * as menuParser from './structs/parser/runtime/menu';
 export * as numberParser from './structs/parser/runtime/number';
 export * as argumentTypeParser from './structs/parser/runtime/argumentType';
 export * as blockTypeParser from './structs/parser/runtime/blockType';
+export * as keyParser from './structs/parser/runtime/key';
 export {
     pluginManager,
     extensionManager

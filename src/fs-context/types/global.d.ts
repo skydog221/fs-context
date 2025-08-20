@@ -12,6 +12,7 @@ declare global {
             version: string;
             platform: string[];
             author: string;
+            language: string;
         };
     }>;
     interface Window {

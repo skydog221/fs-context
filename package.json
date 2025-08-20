@@ -22,9 +22,10 @@
         "version": "1.0.0",
         "platform": [
             "tw",
-            "02engine"
+            "gandi"
         ],
-        "author": "陨落基围虾"
+        "author": "陨落基围虾",
+        "language": "en"
     },
     "author": "陨落基围虾 <3161880837@qq.com>",
     "license": "MIT",

@@ -1,9 +1,9 @@
-import { blockTypeParser, menuParser, pluginManager, textParser } from 'fs-context';
+import { blockTypeParser, menuParser, pluginManager, textParser, keyParser } from 'fs-context';
 import { ExtensionBuilder } from 'fs-context/structs/builder';
 import { BlockType } from 'fs-context/structs/classify';
 import { ExtensionMetadata } from 'fs-context/structs/metadata';
 import { isStoredType } from 'fs-context/structs/parser/runtime/text';
-import { ExtensionStored, ContextEnvironment, ExtensionInfoStored, BlockStored, ScratchTranslateKeyDescriptor } from 'fs-context/structs/stored';
+import { ExtensionStored, ContextEnvironment, ExtensionInfoStored, BlockStored, ScratchTranslateKeyDescriptor, ScratchRuntime } from 'fs-context/structs/stored';
 
 export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) => void, getBlockText?: (key: ScratchTranslateKeyDescriptor) => string) {
     return class implements ExtensionStored {
@@ -49,7 +49,7 @@ export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) 
                     const result: BlockStored = {
                         opcode: blockMd.opcode,
                         blockType: blockTypeParser.store(blockMd.type as BlockType),
-                        text: textParser.storeText(getBlockText?.call(undefined, { id: `${md.id}.blocks.${blockMd.opcode}.text`, default: "" }) ?? ""),
+                        text: getBlockText!({ id: keyParser.blockText(md.id, blockMd), default: 'a' }) ?? 'b',
                         arguments: Object.fromEntries(blockMd.parts().map(part => [
                             part.content,
                             textParser.storeArg(part)
@@ -81,7 +81,7 @@ export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) 
     };
 }
 export function createContextEnvironment(extension: ExtensionBuilder, initer?: (...args: any[]) => void, getBlockText?: (key: ScratchTranslateKeyDescriptor) => string): ContextEnvironment {
-    const rawExtenderStored = createExtender(extension.build());
+    const rawExtenderStored = createExtender(extension.build(), undefined, getBlockText);
     const rawExtensionStored = new rawExtenderStored();
     const extenderStored = createExtender(extension.build(), initer, getBlockText);
     return {
@@ -96,22 +96,18 @@ export function createContextEnvironment(extension: ExtensionBuilder, initer?: (
         }
     };
 }
-export function load(environment: ContextEnvironment, platform: string, initData: any[]) {
-    const runtime = pluginManager.call(platform, 'obtainRuntime', [environment, ...initData]).data ?? undefined;
-    const isSandboxed = pluginManager.call(platform, 'isSandboxed', [environment, runtime ?? null]).data;
+export function load(environment: ContextEnvironment, runtime: ScratchRuntime, initData: any[]) {
+    const isSandboxed = pluginManager.call(fsContext.platform, 'isSandboxed', [environment, runtime]).data;
     if (fsContext.developing) {
         if (runtime) {
             console.log(`Runtime(${isSandboxed ? '' : 'un'}sandboxed) obtained:`, runtime);
         } else {
-            console.log("No runtime obtained.");
+            console.log('No runtime obtained.');
         }
     }
     if (!environment.extension.metadata.allowSandbox && isSandboxed) {
-        throw new Error(`Extension "${environment.extension.metadata.name}" doesn't allow sandboxed, but ${platform} is sandboxed.`);
+        throw new Error(`Extension "${environment.extension.metadata.name}" doesn't allow sandboxed, but ${fsContext.platform} is running in sandboxed.`);
     }
-    environment.extension.metadata.translators.forEach(translator => {
-        pluginManager.call(platform, 'setupTranslation', [environment, runtime ?? null, translator]);
-    });
     environment.extension.stored.runtime = runtime;
-    pluginManager.call(platform, 'load', [environment, runtime ?? null, ...initData]);
+    pluginManager.call(fsContext.platform, 'load', [environment, runtime, ...initData]);
 }

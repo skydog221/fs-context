@@ -9,23 +9,33 @@ if (unsupportedPlatforms.includes(fsContext.platform)) {
 } else if (unsupportedPlatforms.length > 0) {
     console.warn(`Unknown platform ${unsupportedPlatforms.join(', ')} received.`);
 }
-const env = extensionManager.createContextEnvironment(extension);
+const env = extensionManager.createContextEnvironment(extension, () => null, key => key.id ?? key.default);
+
 let runtime: ScratchRuntime;
 pluginManager.call(fsContext.platform, 'apply', [
-    extensionManager.createContextEnvironment(extension, (...args: any[]) => {
-        pluginManager.call(fsContext.platform, 'initExtender', [...args]);
-        if (fsContext.developing) console.log('Constructing stored extender with:', args);
-        extensionManager.load(env, fsContext.platform, args);
-        runtime = pluginManager.call(fsContext.platform, "obtainRuntime", [env, ...args]).data;
-        if (fsContext.developing) {
-            console.warn('Running in development mode. Don`t publish it online.');
-            console.log('\n--->');
-            console.log('Extension data:');
-            console.log('Metadata:', env.extension.metadata);
-            console.log('Stored:', env.extension.stored);
-            console.log('<---');
-            console.log('\ngetInfo():', env.extension.stored.getInfo());
+    extensionManager.createContextEnvironment(
+        extension,
+        (...args: any[]) => {
+            pluginManager.call(fsContext.platform, 'initExtender', [...args]);
+            if (fsContext.developing) console.log('Constructing stored extender with:', args);
+            runtime = pluginManager.call(fsContext.platform, 'obtainRuntime', [env, ...args]).data;
+            env.extension.metadata.translators.forEach(translator => {
+                pluginManager.call(fsContext.platform, 'setupTranslation', [env, runtime, translator]);
+            });
+            extensionManager.load(env, runtime, args);
+            if (fsContext.developing) {
+                console.warn('Running in development mode. Don`t publish it online.');
+                console.log('\n--->');
+                console.log('Extension data:');
+                console.log('Metadata:', env.extension.metadata);
+                console.log('Stored:', env.extension.stored);
+                console.log('<---');
+                console.log('\ngetInfo():', env.extension.stored.getInfo());
+            }
+        },
+        key => {
+            return pluginManager.call(fsContext.platform, 'readTranslationKey', [env, runtime, key]).data ?? key.default
         }
-    }, key => pluginManager.call(fsContext.platform, "readTranslationKey", [env, runtime, key]).data ?? key.default)
+    )
 ], env => new env.extender.stored());
 export default pluginManager.call(fsContext.platform, 'expose', [env]) ?? null;

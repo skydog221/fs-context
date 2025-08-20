@@ -54,7 +54,7 @@ export interface ScratchTranslateKeyDescriptor<K extends string = string> {
     description?: string;
 }
 export interface ScratchTranslate {
-    (key: ScratchTranslateKeyDescriptor): string;
+    (key: ScratchTranslateKeyDescriptor | string): string;
     setup(store: Record<string, Record<string, string>>): void;
     get language(): string;
 }

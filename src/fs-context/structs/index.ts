@@ -1,4 +1,4 @@
-import { colorParser, pluginManager, textParser } from 'fs-context';
+import { colorParser, keyParser, pluginManager, textParser } from 'fs-context';
 import { ExtensionBuilder, BlockBuilder, MenuBuilder } from './builder';
 import { blockTypes, BlockType } from './classify';
 import { BlockTypeSelector } from './interface';
@@ -18,6 +18,7 @@ export function extension<
     const menus: M = [] as unknown as M;
     const loaders: L = {} as unknown as L;
     const translators: TranslatorMetadata[] = [];
+    const defaultTranslator = translator(fsContext.extension.language);
     let color1: HexColorString | null = null;
     let color2: HexColorString | null = null;
     let color3: HexColorString | null = null;
@@ -39,6 +40,7 @@ export function extension<
         },
         block<N extends BlockMetadata>(md: N): ExtensionBuilder<[...B, N], M> {
             blocks.push(md);
+            defaultTranslator.write(keyParser.blockText(fsContext.extension.id, md), { [fsContext.extension.language]: textParser.storeText(md.text) });
             return this as any;
         },
         loader<N extends string, O>(name: N, md: LoaderMetadata<O>): ExtensionBuilder<B, M, L & { [K in N]: O; }> {
@@ -83,7 +85,7 @@ export function extension<
                 loaders,
                 allowSandbox,
                 color: [color1, color2, color3],
-                translators
+                translators: [defaultTranslator, ...translators]
             };
         }
     }
