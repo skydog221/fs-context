@@ -12,9 +12,14 @@
         "checkJs": true,
         "isolatedModules": true,
         "resolveJsonModule": true,
+        "typeRoots": [
+            "node_modules/@types",
+            "node_modules/@turbowarp/types"
+        ],
         "types": [
             "webpack-env",
-            "node"
+            "node",
+            "index.d.ts"
         ],
         "baseUrl": ".",
         "outDir": "dist/native",

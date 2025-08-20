@@ -272,6 +272,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@turbowarp/types@^0.0.13":
+  version "0.0.13"
+  resolved "https://registry.npmjs.org/@turbowarp/types/-/types-0.0.13.tgz#e40e0568b63d9862e2e0fe5c14647b526f8ffb07"
+  integrity sha512-Dazh621PsWNJ3OKylRKkdxdJoasrvpCIfEyK9kGGDU+vXvSh2NDDKlHpdB7U5saZTgzOl0afccltw8M8qJbVpA==
+
 "@types/body-parser@*":
   version "1.19.6"
   resolved "https://registry.npmjs.org/@types/body-parser/-/body-parser-1.19.6.tgz#1859bebb8fd7dac9918a45d54c1971ab8b5af474"

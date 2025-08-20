@@ -11,4 +11,6 @@ export default defineModLoader({
     isSandboxed(_, runtime) {
         return !runtime?.extensions.unsandboxed;
     },
+    setupTranslation(environment, runtime, translator) {
+    }
 });
