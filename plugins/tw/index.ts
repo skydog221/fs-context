@@ -21,7 +21,7 @@ export default defineModLoader({
         }
         runtime?.translate.setup(data);
     },
-    readTranslationKey(_, runtime, __, key) {
+    readTranslationKey(_, runtime, key) {
         return runtime?.translate(key) ?? key.default;
     }
 });

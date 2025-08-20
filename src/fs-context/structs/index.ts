@@ -192,7 +192,7 @@ export function translator<L extends string>(language: L): TranslatorMetadata<L>
     let runtime: ScratchRuntime | null = null;
     const result: TranslatorMetadata<L> = Object.assign((key: ScratchTranslateKeyDescriptor) => {
         if (!env || !runtime) throw new Error('Failed to translate: not initialized yet.');
-        return pluginManager.call(fsContext.platform, 'readTranslationKey', [env, runtime, result, key]).data ?? key.default;
+        return pluginManager.call(fsContext.platform, 'readTranslationKey', [env, runtime, key]).data ?? key.default;
     }, {
         language,
         write(key: string, value: Record<string, string>) {

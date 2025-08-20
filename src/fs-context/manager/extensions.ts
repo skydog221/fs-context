@@ -3,9 +3,9 @@ import { ExtensionBuilder } from 'fs-context/structs/builder';
 import { BlockType } from 'fs-context/structs/classify';
 import { ExtensionMetadata } from 'fs-context/structs/metadata';
 import { isStoredType } from 'fs-context/structs/parser/runtime/text';
-import { ExtensionStored, ContextEnvironment, ExtensionInfoStored, BlockStored } from 'fs-context/structs/stored';
+import { ExtensionStored, ContextEnvironment, ExtensionInfoStored, BlockStored, ScratchTranslateKeyDescriptor } from 'fs-context/structs/stored';
 
-export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) => void) {
+export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) => void, getBlockText?: (key: ScratchTranslateKeyDescriptor) => string) {
     return class implements ExtensionStored {
         [key: string]: unknown;
         runtime = undefined;
@@ -49,7 +49,7 @@ export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) 
                     const result: BlockStored = {
                         opcode: blockMd.opcode,
                         blockType: blockTypeParser.store(blockMd.type as BlockType),
-                        text: textParser.storeText(blockMd.text),
+                        text: textParser.storeText(getBlockText?.call(undefined, { id: `${md.id}.blocks.${blockMd.opcode}.text`, default: "" }) ?? ""),
                         arguments: Object.fromEntries(blockMd.parts().map(part => [
                             part.content,
                             textParser.storeArg(part)
@@ -80,10 +80,10 @@ export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) 
         }
     };
 }
-export function createContextEnvironment(extension: ExtensionBuilder, initer?: (...args: any[]) => void): ContextEnvironment {
+export function createContextEnvironment(extension: ExtensionBuilder, initer?: (...args: any[]) => void, getBlockText?: (key: ScratchTranslateKeyDescriptor) => string): ContextEnvironment {
     const rawExtenderStored = createExtender(extension.build());
     const rawExtensionStored = new rawExtenderStored();
-    const extenderStored = createExtender(extension.build(), initer);
+    const extenderStored = createExtender(extension.build(), initer, getBlockText);
     return {
         window,
         extension: {
@@ -100,7 +100,11 @@ export function load(environment: ContextEnvironment, platform: string, initData
     const runtime = pluginManager.call(platform, 'obtainRuntime', [environment, ...initData]).data ?? undefined;
     const isSandboxed = pluginManager.call(platform, 'isSandboxed', [environment, runtime ?? null]).data;
     if (fsContext.developing) {
-        console.log(`Runtime(${isSandboxed ? '' : 'un'}sandboxed) obtained:`, runtime);
+        if (runtime) {
+            console.log(`Runtime(${isSandboxed ? '' : 'un'}sandboxed) obtained:`, runtime);
+        } else {
+            console.log("No runtime obtained.");
+        }
     }
     if (!environment.extension.metadata.allowSandbox && isSandboxed) {
         throw new Error(`Extension "${environment.extension.metadata.name}" doesn't allow sandboxed, but ${platform} is sandboxed.`);
