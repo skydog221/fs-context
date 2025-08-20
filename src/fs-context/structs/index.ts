@@ -1,10 +1,11 @@
-import { colorParser, textParser } from 'fs-context';
+import { colorParser, pluginManager, textParser } from 'fs-context';
 import { ExtensionBuilder, BlockBuilder, MenuBuilder } from './builder';
 import { blockTypes, BlockType } from './classify';
 import { BlockTypeSelector } from './interface';
 import { BlockMetadata, MenuMetadata, MenuItem, LoaderMetadata, TranslatorMetadata, TranslationStore } from './metadata';
 import { ArgumentMap, DefaultMap } from './parser/compiltime';
 import { HexColorString } from './util';
+import { ContextEnvironment, ScratchRuntime, ScratchTranslateKeyDescriptor } from './stored';
 
 export function extension<
     B extends BlockMetadata[] = [],
@@ -16,6 +17,7 @@ export function extension<
     const blocks: B = [] as unknown as B;
     const menus: M = [] as unknown as M;
     const loaders: L = {} as unknown as L;
+    const translators: TranslatorMetadata[] = [];
     let color1: HexColorString | null = null;
     let color2: HexColorString | null = null;
     let color3: HexColorString | null = null;
@@ -29,18 +31,6 @@ export function extension<
         },
         description(v) {
             description = v;
-            return this;
-        },
-        blocks(v) {
-            blocks.push(...v);
-            return this;
-        },
-        menus(v) {
-            menus.push(...v);
-            return this;
-        },
-        loaders(v) {
-            Object.assign(loaders, v);
             return this;
         },
         menu<N extends MenuMetadata>(md: N): ExtensionBuilder<B, [...M, N]> {
@@ -79,6 +69,10 @@ export function extension<
             blocks.push(blockType.label('').text(text).build());
             return this;
         },
+        use(...newTranslatiors) {
+            translators.push(...newTranslatiors);
+            return this;
+        },
         build() {
             return {
                 id: fsContext.extension.id,
@@ -88,7 +82,8 @@ export function extension<
                 menus,
                 loaders,
                 allowSandbox,
-                color: [color1, color2, color3]
+                color: [color1, color2, color3],
+                translators
             };
         }
     }
@@ -193,16 +188,26 @@ export function remoteStore<T extends object>(data: T): StoreSelf<T> {
 }
 export function translator<L extends string>(language: L): TranslatorMetadata<L> {
     const store: TranslationStore = {};
-    return Object.assign((key: string) => {
-        return store[key] as any;
+    let env: ContextEnvironment | null = null;
+    let runtime: ScratchRuntime | null = null;
+    const result: TranslatorMetadata<L> = Object.assign((key: ScratchTranslateKeyDescriptor) => {
+        if (!env || !runtime) throw new Error('Failed to translate: not initialized yet.');
+        return pluginManager.call(fsContext.platform, 'readTranslationKey', [env, runtime, result, key]).data ?? key.default;
     }, {
         language,
         write(key: string, value: Record<string, string>) {
             store[key] = value;
-            return this as any;
+            return result as any;
+        },
+        init(newEnv: ContextEnvironment, newRuntime: ScratchRuntime) {
+            env = newEnv;
+            runtime = newRuntime;
+            pluginManager.call(fsContext.platform, 'setupTranslation', [env, runtime, result]);
+            return result;
         },
         get store() {
             return store;
         }
     });
+    return result;
 }

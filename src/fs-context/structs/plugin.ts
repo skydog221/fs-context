@@ -1,4 +1,4 @@
-import { ContextEnvironment, ScratchRuntime } from 'fs-context/structs/stored';
+import { ContextEnvironment, ScratchRuntime, ScratchTranslateKeyDescriptor } from 'fs-context/structs/stored';
 import { TranslatorMetadata } from './metadata';
 
 /**
@@ -15,7 +15,7 @@ export interface ModLoadable {
     unload?(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, ...contextData: any[]): void;
     expose?(this: ModLoadable, environment: ContextEnvironment): any;
     setupTranslation?(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, translator: TranslatorMetadata): void;
-    readTranslationKey?(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, translator: TranslatorMetadata, key: string): string;
+    readTranslationKey?(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, translator: TranslatorMetadata, key: ScratchTranslateKeyDescriptor): string;
 }
 export function defineModLoader(loader: ModLoadable) {
     return loader;

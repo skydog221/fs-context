@@ -2,8 +2,9 @@ import { BlockTypeStored, InputTypeStored } from './classify';
 import { ExtensionBuilder } from './builder';
 import { ExtensionMetadata } from './metadata';
 import { HexColorString } from './util';
-import ScratchRuntime from "scratch-vm";
+import BaseScratchVM from 'scratch-vm';
 
+export type BaseScratchRuntime = BaseScratchVM['runtime'];
 
 export interface BlockStored {
     opcode?: string;
@@ -37,7 +38,26 @@ export type ExtensionStored = {
     getInfo(): ExtensionInfoStored;
     runtime?: ScratchRuntime;
 } & Record<string, unknown>;
-export { ScratchRuntime };
+export type ScratchRuntime = null | {
+    extensions: {
+        unsandboxed: boolean;
+        register(extension: ExtensionStored): void;
+        unregister(extension: ExtensionStored): void;
+    }
+    translate: ScratchTranslate;
+    vm: BaseScratchVM;
+    runtime: BaseScratchRuntime;
+}
+export interface ScratchTranslateKeyDescriptor<K extends string = string> {
+    id?: K;
+    default: string;
+    description?: string;
+}
+export interface ScratchTranslate {
+    (key: ScratchTranslateKeyDescriptor): string;
+    setup(store: Record<string, Record<string, string>>): void;
+    get language(): string;
+}
 export interface ContextEnvironment {
     window: Window;
     extension: ExtensionData;

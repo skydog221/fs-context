@@ -1,4 +1,5 @@
 import { defineModLoader } from 'fs-context/structs/plugin';
+import tw from '../tw';
 
 declare const window: Window & {
     tempExt: any;
@@ -20,4 +21,5 @@ export default defineModLoader({
     isSandboxed() {
         return false;
     },
+    setupTranslation: tw.setupTranslation
 });

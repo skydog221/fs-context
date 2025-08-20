@@ -1,6 +1,7 @@
 import { BlockType } from './classify';
 import { ArgumentMap, DefaultMap } from './parser/compiltime';
 import { TextPart } from './parser/runtime/text';
+import { ContextEnvironment, ScratchRuntime, ScratchTranslateKeyDescriptor } from './stored';
 import { HexColorString } from './util';
 
 export interface ExtensionMetadata<
@@ -16,6 +17,7 @@ export interface ExtensionMetadata<
     loaders: Loaders;
     allowSandbox: boolean;
     color: [HexColorString | null, HexColorString | null, HexColorString | null];
+    translators: TranslatorMetadata[];
 }
 export interface BlockMetadata<Text extends string = string, Value = any, Loaders extends Record<string, any> = any> {
     parts(): TextPart[];
@@ -38,10 +40,15 @@ export interface MenuMetadata<Name extends string = any, Items extends MenuItem[
 export interface LoaderMetadata<Output = any> {
     (args: string): Output;
 }
+//这个翻译库的格式是{[键]:{[语言]:内容}}，不是原版的{[语言]:{[键]:内容}}
 export type TranslationStore = Record<string, Record<string, string>>;
 export interface TranslatorMetadata<Language extends string = string, Store extends TranslationStore = TranslationStore> {
     language: Language;
     write<K extends string, V extends Record<string, string>>(key: K, value: V): TranslatorMetadata<Language, Store & Record<K, V>>;
-    <K extends keyof Store>(key: K): Store[K];
+    init(
+        env: ContextEnvironment,
+        runtime: ScratchRuntime
+    ): TranslatorMetadata<Language, Store>;
+    <K extends keyof Store>(key: ScratchTranslateKeyDescriptor<K & string>): Store[K][Language];
     get store(): Store;
 }

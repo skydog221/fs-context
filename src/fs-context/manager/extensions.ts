@@ -8,7 +8,7 @@ import { ExtensionStored, ContextEnvironment, ExtensionInfoStored, BlockStored }
 export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) => void) {
     return class implements ExtensionStored {
         [key: string]: unknown;
-        runtime = null;
+        runtime = undefined;
         constructor(...args: any[]) {
             if (initer) {
                 initer(...args);
@@ -97,14 +97,17 @@ export function createContextEnvironment(extension: ExtensionBuilder, initer?: (
     };
 }
 export function load(environment: ContextEnvironment, platform: string, initData: any[]) {
-    const runtime = pluginManager.call(platform, 'obtainRuntime', [environment, ...initData]).data
-    const isSandboxed = pluginManager.call(platform, 'isSandboxed', [environment, runtime]).data;
+    const runtime = pluginManager.call(platform, 'obtainRuntime', [environment, ...initData]).data ?? undefined;
+    const isSandboxed = pluginManager.call(platform, 'isSandboxed', [environment, runtime ?? null]).data;
     if (fsContext.developing) {
         console.log(`Runtime(${isSandboxed ? '' : 'un'}sandboxed) obtained:`, runtime);
     }
     if (!environment.extension.metadata.allowSandbox && isSandboxed) {
         throw new Error(`Extension "${environment.extension.metadata.name}" doesn't allow sandboxed, but ${platform} is sandboxed.`);
     }
+    environment.extension.metadata.translators.forEach(translator => {
+        pluginManager.call(platform, 'setupTranslation', [environment, runtime ?? null, translator]);
+    });
     environment.extension.stored.runtime = runtime;
-    pluginManager.call(platform, 'load', [environment, runtime, ...initData]);
+    pluginManager.call(platform, 'load', [environment, runtime ?? null, ...initData]);
 }
