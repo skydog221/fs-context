@@ -10,4 +10,4 @@ export default extension()
             })
             .build()
     )
-    .use(translate)
+    .use(translate);
