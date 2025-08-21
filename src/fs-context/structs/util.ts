@@ -28,7 +28,7 @@ export function deepMerge<T extends Record<string, any>>(...sources: T[]): T {
     if (sources.length === 0) {
         return {} as T;
     }
-    let target = sources[0];
+    const target = sources[0];
     for (let i = 1; i < sources.length; i++) {
         const source = sources[i];
         if (typeof source === 'object' && source !== null) {
