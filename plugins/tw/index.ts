@@ -1,4 +1,6 @@
+import { textParser } from 'fs-context';
 import { defineModLoader } from 'fs-context/structs/plugin';
+import { deepMerge } from 'fs-context/structs/util';
 
 export default defineModLoader({
     id: 'tw',
@@ -11,12 +13,13 @@ export default defineModLoader({
     isSandboxed(_, runtime) {
         return !runtime?.extensions.unsandboxed;
     },
-    setupTranslation(_, runtime, translator) {
+    setupTranslation(_, runtime, translators) {
+        const store = deepMerge(...translators.map(translator => translator.store));
         const data: Record<string, Record<string, string>> = {};
-        for (const key in translator.store) {
-            for (const lang in translator.store[key]) {
+        for (const key in store) {
+            for (const lang in store[key]) {
                 data[lang] = data[lang] || {};
-                data[lang][key] = translator.store[key][lang];
+                data[lang][key] = textParser.storeText(store[key][lang]);
             }
         }
         runtime?.translate.setup(data);

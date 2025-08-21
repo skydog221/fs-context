@@ -14,7 +14,7 @@ export interface ModLoadable {
     load(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, ...contextData: any[]): void;
     unload?(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, ...contextData: any[]): void;
     expose?(this: ModLoadable, environment: ContextEnvironment): any;
-    setupTranslation?(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, translator: TranslatorMetadata): void;
+    setupTranslation?(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, translators: TranslatorMetadata[]): void;
     readTranslationKey?(this: ModLoadable, environment: ContextEnvironment, runtime: ScratchRuntime, key: ScratchTranslateKeyDescriptor): string;
 }
 export function defineModLoader(loader: ModLoadable) {

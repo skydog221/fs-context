@@ -1,5 +1,5 @@
 import { BlockMetadata } from 'fs-context/structs/metadata';
 
-export function blockText(extensionId: string, block: BlockMetadata) {
-    return `${extensionId}.blocks.${block.opcode}.text`;
+export function blockText(extensionId: string, blockOpcode: string) {
+    return `${extensionId}.blocks.${blockOpcode}.text`;
 }

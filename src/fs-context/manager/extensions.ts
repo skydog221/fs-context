@@ -49,7 +49,7 @@ export function createExtender(md: ExtensionMetadata, initer?: (...args: any[]) 
                     const result: BlockStored = {
                         opcode: blockMd.opcode,
                         blockType: blockTypeParser.store(blockMd.type as BlockType),
-                        text: getBlockText!({ id: keyParser.blockText(md.id, blockMd), default: 'a' }) ?? 'b',
+                        text: getBlockText!({ id: keyParser.blockText(md.id, blockMd.opcode), default: 'sb' }) ?? 'abc',
                         arguments: Object.fromEntries(blockMd.parts().map(part => [
                             part.content,
                             textParser.storeArg(part)

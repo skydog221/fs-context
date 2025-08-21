@@ -18,4 +18,7 @@ declare global {
     interface Window {
         Scratch: ScratchRuntime;
     }
+    interface ObjectConstructor {
+        hasOwn<K extends string, T>(obj: T, prop: K): obj is T & Record<K, any>;
+    }
 }

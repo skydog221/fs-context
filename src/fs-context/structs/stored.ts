@@ -1,6 +1,6 @@
 import { BlockTypeStored, InputTypeStored } from './classify';
 import { ExtensionBuilder } from './builder';
-import { ExtensionMetadata } from './metadata';
+import { ExtensionMetadata, TranslationStore } from './metadata';
 import { HexColorString } from './util';
 import BaseScratchVM from 'scratch-vm';
 
@@ -47,6 +47,7 @@ export type ScratchRuntime = null | {
     translate: ScratchTranslate;
     vm: BaseScratchVM;
     runtime: BaseScratchRuntime;
+    getFormatMessage: (key: TranslationStore) => (key: ScratchTranslateKeyDescriptor) => string; //这里是原版的{[语言]:{[键]:内容}}，虽然位置不一样但是数据结构一样
 }
 export interface ScratchTranslateKeyDescriptor<K extends string = string> {
     id?: K;

@@ -1,4 +1,5 @@
 import { blockType, extension } from 'fs-context';
+import { translate } from './translator';
 
 export default extension()
     .block(
@@ -9,3 +10,4 @@ export default extension()
             })
             .build()
     )
+    .use(translate)

@@ -42,13 +42,12 @@ export interface LoaderMetadata<Output = any> {
 }
 //这个翻译库的格式是{[键]:{[语言]:内容}}，不是原版的{[语言]:{[键]:内容}}
 export type TranslationStore = Record<string, Record<string, string>>;
-export interface TranslatorMetadata<Language extends string = string, Store extends TranslationStore = TranslationStore> {
-    language: Language;
-    write<K extends string, V extends Record<string, string>>(key: K, value: V): TranslatorMetadata<Language, Store & Record<K, V>>;
+export interface TranslatorMetadata<Store extends TranslationStore = TranslationStore> {
+    write<K extends string, V extends Record<string, string>>(key: K, value: V): TranslatorMetadata<Store & Record<K, V>>;
     init(
         env: ContextEnvironment,
         runtime: ScratchRuntime
-    ): TranslatorMetadata<Language, Store>;
-    <K extends keyof Store>(key: ScratchTranslateKeyDescriptor<K & string>): Store[K][Language];
+    ): TranslatorMetadata<Store>;
+    <K extends keyof Store, L extends string>(key: ScratchTranslateKeyDescriptor<K & string>, language: L): Store[K][L];
     get store(): Store;
 }

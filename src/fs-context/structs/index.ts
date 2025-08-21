@@ -18,7 +18,7 @@ export function extension<
     const menus: M = [] as unknown as M;
     const loaders: L = {} as unknown as L;
     const translators: TranslatorMetadata[] = [];
-    const defaultTranslator = translator(fsContext.extension.language);
+    const defaultTranslator = translator();
     let color1: HexColorString | null = null;
     let color2: HexColorString | null = null;
     let color3: HexColorString | null = null;
@@ -40,7 +40,7 @@ export function extension<
         },
         block<N extends BlockMetadata>(md: N): ExtensionBuilder<[...B, N], M> {
             blocks.push(md);
-            defaultTranslator.write(keyParser.blockText(fsContext.extension.id, md), { [fsContext.extension.language]: textParser.storeText(md.text) });
+            defaultTranslator.write(keyParser.blockText(fsContext.extension.id, md.opcode), { [fsContext.extension.language]: textParser.storeText(md.text) });
             return this as any;
         },
         loader<N extends string, O>(name: N, md: LoaderMetadata<O>): ExtensionBuilder<B, M, L & { [K in N]: O; }> {
@@ -188,15 +188,14 @@ export function remoteStore<T extends object>(data: T): StoreSelf<T> {
         }
     };
 }
-export function translator<L extends string>(language: L): TranslatorMetadata<L> {
+export function translator(): TranslatorMetadata {
     const store: TranslationStore = {};
     let env: ContextEnvironment | null = null;
     let runtime: ScratchRuntime | null = null;
-    const result: TranslatorMetadata<L> = Object.assign((key: ScratchTranslateKeyDescriptor) => {
+    const result: TranslatorMetadata = Object.assign((key: ScratchTranslateKeyDescriptor) => {
         if (!env || !runtime) throw new Error('Failed to translate: not initialized yet.');
         return pluginManager.call(fsContext.platform, 'readTranslationKey', [env, runtime, key]).data ?? key.default;
     }, {
-        language,
         write(key: string, value: Record<string, string>) {
             store[key] = value;
             return result as any;
@@ -204,7 +203,6 @@ export function translator<L extends string>(language: L): TranslatorMetadata<L>
         init(newEnv: ContextEnvironment, newRuntime: ScratchRuntime) {
             env = newEnv;
             runtime = newRuntime;
-            pluginManager.call(fsContext.platform, 'setupTranslation', [env, runtime, result]);
             return result;
         },
         get store() {

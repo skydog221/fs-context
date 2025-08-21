@@ -9,8 +9,7 @@ if (unsupportedPlatforms.includes(fsContext.platform)) {
 } else if (unsupportedPlatforms.length > 0) {
     console.warn(`Unknown platform ${unsupportedPlatforms.join(', ')} received.`);
 }
-const env = extensionManager.createContextEnvironment(extension, () => null, key => key.id ?? key.default);
-
+const env = extensionManager.createContextEnvironment(extension, undefined, key => key.id ?? key.default);
 let runtime: ScratchRuntime;
 pluginManager.call(fsContext.platform, 'apply', [
     extensionManager.createContextEnvironment(
@@ -19,9 +18,7 @@ pluginManager.call(fsContext.platform, 'apply', [
             pluginManager.call(fsContext.platform, 'initExtender', [...args]);
             if (fsContext.developing) console.log('Constructing stored extender with:', args);
             runtime = pluginManager.call(fsContext.platform, 'obtainRuntime', [env, ...args]).data;
-            env.extension.metadata.translators.forEach(translator => {
-                pluginManager.call(fsContext.platform, 'setupTranslation', [env, runtime, translator]);
-            });
+            pluginManager.call(fsContext.platform, 'setupTranslation', [env, runtime, env.extension.metadata.translators]);
             extensionManager.load(env, runtime, args);
             if (fsContext.developing) {
                 console.warn('Running in development mode. Don`t publish it online.');
@@ -34,7 +31,7 @@ pluginManager.call(fsContext.platform, 'apply', [
             }
         },
         key => {
-            return pluginManager.call(fsContext.platform, 'readTranslationKey', [env, runtime, key]).data ?? key.default
+            return pluginManager.call(fsContext.platform, 'readTranslationKey', [env, runtime, key]).data ?? key.default;
         }
     )
 ], env => new env.extender.stored());
