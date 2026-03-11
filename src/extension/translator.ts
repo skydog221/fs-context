@@ -1,7 +1,11 @@
-import { keyParser, translator } from 'fs-context';
+import { keyParser, translator } from "fs-context";
 
 export const translate = translator()
-    .write(keyParser.blockText('exampleextension', 'add'), {
-        'zh-cn': '计算加法[a:number]+[b:number]',
-        'es': 'sumar [a:number] + [b:number]',
-    });
+  .write(keyParser.blockText("vvenvehelper", "unban"), {
+    "zh-cn": "解除禁用VVenve",
+    es: "UNBAN VVenve",
+  })
+  .write(keyParser.blockText("vvenvehelper", "ban"), {
+    "zh-cn": "禁用VVenve",
+    es: "BAN VVenve",
+  });
